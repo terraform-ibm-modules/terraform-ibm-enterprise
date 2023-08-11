@@ -149,6 +149,7 @@ statement instead the previous block.
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.49.0, < 2.0.0 |
 
 ### Modules
 
@@ -156,11 +157,17 @@ No modules.
 
 ### Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [ibm_enterprise_account_group.enterprise_account_group](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/resources/enterprise_account_group) | resource |
+| [ibm_enterprises.enterprise](https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/enterprises) | data source |
 
 ### Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_enterprise_name"></a> [enterprise\_name](#input\_enterprise\_name) | name of the enterprise | `string` | `"terraform test1"` | no |
+| <a name="input_tree_based_input"></a> [tree\_based\_input](#input\_tree\_based\_input) | List of account groups and account names | <pre>list(<br>    object({<br>      type                   = string<br>      name                   = string<br>      ref_name               = optional(string),        # used internally only. If not set, then use name. Validate that ref_name are unique.<br>      parent                 = optional(string, "root") #parent reference an ref_name<br>      primary_contact_iam_id = optional(string, "root") #parent reference an ref_name  s<br>    })<br>  )</pre> | <pre>[<br>  {<br>    "name": "parent account group",<br>    "type": "account group"<br>  },<br>  {<br>    "name": "child account group",<br>    "parent": "parent account group",<br>    "type": "account group"<br>  }<br>]</pre> | no |
 
 ### Outputs
 

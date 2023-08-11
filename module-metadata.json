@@ -1,12 +1,82 @@
 {
   "path": ".",
-  "variables": {},
+  "variables": {
+    "enterprise_name": {
+      "name": "enterprise_name",
+      "type": "string",
+      "description": "name of the enterprise",
+      "default": "terraform test1",
+      "source": [
+        "data.ibm_enterprises.enterprise.name"
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 1
+      }
+    },
+    "tree_based_input": {
+      "name": "tree_based_input",
+      "type": "list(\n    object({\n      type                   = string\n      name                   = string\n      ref_name               = optional(string),        # used internally only. If not set, then use name. Validate that ref_name are unique.\n      parent                 = optional(string, \"root\") #parent reference an ref_name\n      primary_contact_iam_id = optional(string, \"root\") #parent reference an ref_name  s\n    })\n  )",
+      "description": "List of account groups and account names",
+      "default": [
+        {
+          "name": "parent account group",
+          "type": "account group"
+        },
+        {
+          "name": "child account group",
+          "parent": "parent account group",
+          "type": "account group"
+        }
+      ],
+      "pos": {
+        "filename": "variables.tf",
+        "line": 6
+      }
+    }
+  },
   "outputs": {},
   "required_core": [
     "\u003e= 1.3.0"
   ],
-  "required_providers": {},
-  "managed_resources": {},
-  "data_resources": {},
+  "required_providers": {
+    "ibm": {
+      "source": "IBM-Cloud/ibm",
+      "version_constraints": [
+        "\u003e= 1.49.0, \u003c 2.0.0"
+      ]
+    }
+  },
+  "managed_resources": {
+    "ibm_enterprise_account_group.enterprise_account_group": {
+      "mode": "managed",
+      "type": "ibm_enterprise_account_group",
+      "name": "enterprise_account_group",
+      "provider": {
+        "name": "ibm"
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 14
+      }
+    }
+  },
+  "data_resources": {
+    "data.ibm_enterprises.enterprise": {
+      "mode": "data",
+      "type": "ibm_enterprises",
+      "name": "enterprise",
+      "attributes": {
+        "name": "enterprise_name"
+      },
+      "provider": {
+        "name": "ibm"
+      },
+      "pos": {
+        "filename": "main.tf",
+        "line": 1
+      }
+    }
+  },
   "module_calls": {}
 }
