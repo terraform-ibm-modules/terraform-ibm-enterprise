@@ -1,9 +1,27 @@
-##############################################################################
-# Input Variables
-##############################################################################
+variable "enterprise_crn" {
+  type        = string
+  description = "Enterprise CRN"
+}
 
-#variable "my_variable" {
-#  type        = string
-#  description = "A description of my variable"
-#  default     = "default_value"
-#}
+variable "enterprise_primary_contact_iam_id" {
+  type        = string
+  description = "Enterprise owner IAM id"
+}
+variable "enterprise_json_input" {
+  description = "List of account groups and account names"
+  type = map(list(object({
+    name     = string
+    accounts = optional(list(object({ name = string })))
+    account_groups = optional(list(object(
+      { name     = string,
+        accounts = optional(list(object({ name = string })))
+        account_groups = optional(list(object({
+          name     = string,
+          accounts = optional(list(object({ name = string })))
+          account_groups = optional(list(object(
+          { name = string })))
+        })))
+    })))
+    }))
+  )
+}
