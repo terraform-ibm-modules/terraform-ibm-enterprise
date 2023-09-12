@@ -1,24 +1,10 @@
-##############################################################################
-# Resource group
-##############################################################################
-
-module "resource_group" {
-  source  = "terraform-ibm-modules/resource-group/ibm"
-  version = "1.1.5"
-  # if an existing resource group is not set (null) create a new one using prefix
-  resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
-  existing_resource_group_name = var.resource_group
+data "ibm_enterprises" "enterprise" {
+  name = var.enterprise_name
 }
 
-##############################################################################
-# COS instance
-##############################################################################
-
-resource "ibm_resource_instance" "cos_instance" {
-  name              = "${var.prefix}-cos"
-  resource_group_id = module.resource_group.resource_group_id
-  service           = "cloud-object-storage"
-  plan              = "standard"
-  location          = "global"
-  tags              = var.resource_tags
+module "ibm_enterprise" {
+  source                            = "../.."
+  enterprise_crn                    = data.ibm_enterprises.enterprise.enterprises[0].crn
+  enterprise_primary_contact_iam_id = data.ibm_enterprises.enterprise.enterprises[0].primary_contact_iam_id
+  enterprise_json_input             = var.enterprise_json_input
 }
