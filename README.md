@@ -2,7 +2,7 @@
 
 This is a collection of sub modules and which will take tree based enterprise inputs and create child accounts and account-groups in an enterprise
 * [dynamic_values](submodules/dynamic_values)
-* [enterprise_heirarchy](submodules/enterprise_heirarchy)
+* [enterprise_hierarchy](submodules/enterprise_hierarchy)
 
 
 ## Overview

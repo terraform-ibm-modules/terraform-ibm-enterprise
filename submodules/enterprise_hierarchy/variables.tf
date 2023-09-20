@@ -1,7 +1,8 @@
-variable "enterprise_heirarchy" {
+variable "enterprise_hierarchy" {
   type = map(list(object({
-    name   = string
-    parent = optional(string)
+    name         = string
+    parent       = optional(string)
+    owner_iam_id = optional(string)
   })))
   description = "tree based input for creating enterprise children"
 }
