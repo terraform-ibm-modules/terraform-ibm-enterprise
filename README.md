@@ -15,8 +15,6 @@
     * [Basic example](./examples/basic)
     * [Complete example](./examples/complete)
 * [Contributing](#contributing)
-
-## terraform-ibm-enterprise
 <!-- END OVERVIEW HOOK -->
 
 <!-- Remove the content in this H2 heading after completing the steps -->
