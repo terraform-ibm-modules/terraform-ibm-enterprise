@@ -1,7 +1,7 @@
 variable "enterprise_name" {
   description = "name of the enterprise"
   type        = string
-  default     = "terraform test1"
+  default     = "DAF Enterprise"
 }
 
 # for now added support for upto 3 level depth of enterprise hierarchy
