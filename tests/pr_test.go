@@ -20,7 +20,7 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 
 	options.TerraformVars = map[string]interface{}{
 		"prefix":          options.Prefix,
-		"enterprise_name": "DAF enterprise",
+		"enterprise_name": "DAF Enterprise",
 	}
 
 	return options
