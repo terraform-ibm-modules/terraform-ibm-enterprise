@@ -1,12 +1,17 @@
+########################################################################################################################
+# Input Variables
+########################################################################################################################
+
 variable "enterprise_crn" {
   type        = string
-  description = "Enterprise CRN"
+  description = "The CRN of the parent Enterprise account to use."
 }
 
 variable "enterprise_primary_contact_iam_id" {
   type        = string
-  description = "Enterprise owner IAM id"
+  description = "The IAM id of the parent Enterprise account owner."
 }
+
 variable "enterprise_json_input" {
   description = "List of account groups and account names"
   type = map(list(object({

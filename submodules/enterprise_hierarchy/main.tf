@@ -1,4 +1,3 @@
-
 resource "ibm_enterprise_account_group" "enterprise_account_group" {
   for_each = {
     for account_group in var.enterprise_hierarchy.account_groups :

@@ -22,9 +22,7 @@ locals {
     ] if child_object.account_groups != null
   ])
 
-
   // accounts
-
   accounts = lookup(var.enterprise_json_input, "accounts", [])
   depth_0_accounts = length(local.accounts) > 0 ? flatten([for key, v in local.accounts : [
     {
@@ -50,7 +48,6 @@ locals {
     }
     ] if child_object.accounts != null
   ])
-
 
   // enterprise heirarchies
   enterprise_hierarchy_depth_0 = {

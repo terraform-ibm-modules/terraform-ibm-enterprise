@@ -4,6 +4,7 @@ module "dynamic_values" {
   enterprise_crn                    = var.enterprise_crn
   enterprise_primary_contact_iam_id = var.enterprise_primary_contact_iam_id
 }
+
 module "enterprise_hierarchy_depth_0" {
   source                            = "./submodules/enterprise_hierarchy"
   enterprise_hierarchy              = module.dynamic_values.enterprise_hierarchy_depth_0
@@ -11,6 +12,7 @@ module "enterprise_hierarchy_depth_0" {
   enterprise_crn                    = var.enterprise_crn
   enterprise_primary_contact_iam_id = var.enterprise_primary_contact_iam_id
 }
+
 module "enterprise_hierarchy_depth_1" {
   source                            = "./submodules/enterprise_hierarchy"
   enterprise_hierarchy              = module.dynamic_values.enterprise_hierarchy_depth_1
@@ -18,6 +20,7 @@ module "enterprise_hierarchy_depth_1" {
   enterprise_crn                    = var.enterprise_crn
   enterprise_primary_contact_iam_id = var.enterprise_primary_contact_iam_id
 }
+
 module "enterprise_hierarchy_depth_2" {
   source                            = "./submodules/enterprise_hierarchy"
   enterprise_hierarchy              = module.dynamic_values.enterprise_hierarchy_depth_2
