@@ -1,3 +1,7 @@
+########################################################################################################################
+# Outputs
+########################################################################################################################
+
 output "enterprise_hierarchy_depth_0" {
   value       = module.dynamic_values.enterprise_hierarchy_depth_0
   description = "Enterprise input for depth 0"

@@ -1,3 +1,3 @@
-# dynamic values
+# Dynamic values
 
-This submodule will simplyfy the nested enterprise input json and create input for each level(Depth) in enterprise hierarchy
+This submodule will simplify the nested enterprise input json and create input for each level(Depth) in enterprise hierarchy

@@ -1,3 +1,3 @@
 # Basic example
 
-This example will create a hierarchy of enterprise child accounts and account groups
+A simple example that shows how to provision an enterprise account group and account.
