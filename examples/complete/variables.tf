@@ -25,13 +25,10 @@ variable "enterprise_json_input" {
   )
   default = {
     account_groups = [{
-      name     = "depth_1_account_group1",
-      accounts = [{ name = "depth_2_account" }]
+      name = "depth_0_account_group1"
     }]
-    accounts = [
-      { name = "depth0 account" },
-    ]
-  }
+    accounts = [{ name = "depth_0_account" },
+  ] }
 }
 
 variable "ibmcloud_api_key" {
