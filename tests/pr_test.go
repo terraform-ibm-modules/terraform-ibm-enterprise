@@ -36,7 +36,7 @@ func TestRunBasicExample(t *testing.T) {
 	assert.NotNil(t, output, "Expected some output")
 }
 
-func TestRunCompleteExample(t *testing.T) {
+func TestRunAdvancedExample(t *testing.T) {
 	t.Parallel()
 
 	options := setupOptions(t, "enterprise-com", advancedExampleDir)
@@ -46,11 +46,10 @@ func TestRunCompleteExample(t *testing.T) {
 	assert.NotNil(t, output, "Expected some output")
 }
 
-func TestRunUpgradeExample(t *testing.T) {
+func TestRunUpgradeAdvancedExample(t *testing.T) {
 	t.Parallel()
 
-	// TODO: Replace with advanced example when issue with destroy account groups is resolved
-	options := setupOptions(t, "enterprise-upg", basicExampleDir)
+	options := setupOptions(t, "enterprise-upg", advancedExampleDir)
 
 	output, err := options.RunTestUpgrade()
 	if !options.UpgradeTestSkipped {

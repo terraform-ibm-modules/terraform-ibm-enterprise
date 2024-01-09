@@ -9,6 +9,9 @@ module "enterprise" {
   enterprise_crn                    = data.ibm_enterprises.enterprise.enterprises[0].crn
   enterprise_primary_contact_iam_id = data.ibm_enterprises.enterprise.enterprises[0].primary_contact_iam_id
   enterprise_json_input = {
+    # Create account at depth 0 (not inside any account group)
+    accounts = [{ name = "${var.prefix}_account_depth_0" }]
+
     account_groups = [{
       # Here is how to create a hierarchy of enterprise child accounts and account groups
       # NB: There is currently a limitation with this when doing terraform destroy as accounts do not get fully deleted
@@ -17,15 +20,15 @@ module "enterprise" {
       # This is why the account creation is commented out below.
 
       name = "${var.prefix}_account_group_depth_0",
-      # accounts = [{ name = "${var.prefix}_account_depth_0" }],
+      # accounts = [{ name = "${var.prefix}_account_depth_1" }],
       account_groups = [
         {
           name = "${var.prefix}_account_group_depth_1",
-          # accounts = [{ name = "${var.prefix}_account_depth_1" }],
+          # accounts = [{ name = "${var.prefix}_account_depth_2" }],
           account_groups = [
             {
               name = "${var.prefix}_account_group_depth_2",
-              # accounts = [{ name = "${var.prefix}_account_depth_2" }],
+              # accounts = [{ name = "${var.prefix}_account_depth_3" }],
             }
           ]
         }
