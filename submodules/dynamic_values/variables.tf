@@ -2,20 +2,20 @@
 variable "enterprise_json_input" {
   description = "List of enterprise child account groups and account"
   type = list(object({
-    accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
+    accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })), [])
     account_groups = optional(list(object(
       { name     = string,
-        accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
+        accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })), [])
         account_groups = optional(list(object({
           name     = string,
-          accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
+          accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })), [])
           account_groups = optional(list(object(
             { name           = string,
-              accounts       = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
-              account_groups = optional(list(object({ name = string })))
-          })))
-        })))
-    })))
+              accounts       = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })), [])
+              account_groups = optional(list(object({ name = string })), [])
+          })), [])
+        })), [])
+    })), [])
   }))
 }
 
