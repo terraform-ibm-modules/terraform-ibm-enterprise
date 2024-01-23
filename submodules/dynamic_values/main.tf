@@ -1,8 +1,14 @@
 
 // account_groups
 locals {
-  input                  = var.enterprise_json_input
-  depth_0_account_groups = lookup(var.enterprise_json_input, "account_groups", [])
+
+  enterprise_json_input = {
+    for name, child in var.enterprise_json_input[0] :
+    name => child
+  }
+
+  input                  = local.enterprise_json_input
+  depth_0_account_groups = lookup(local.enterprise_json_input, "account_groups", [])
   depth_1_account_groups = length(local.depth_0_account_groups) > 0 ? flatten([for key, child_object in local.depth_0_account_groups : [
     for k, v in child_object.account_groups : {
       "account_groups" = v.account_groups
@@ -23,7 +29,8 @@ locals {
   ])
 
   // accounts
-  accounts = lookup(var.enterprise_json_input, "accounts", [])
+
+  accounts = lookup(local.enterprise_json_input, "accounts", [])
   depth_0_accounts = length(local.accounts) > 0 ? flatten([for key, v in local.accounts : [
     {
       "name"         = v.name

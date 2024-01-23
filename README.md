@@ -83,16 +83,12 @@ No resources.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_enterprise_crn"></a> [enterprise\_crn](#input\_enterprise\_crn) | The CRN of the parent Enterprise account to use. | `string` | n/a | yes |
-| <a name="input_enterprise_json_input"></a> [enterprise\_json\_input](#input\_enterprise\_json\_input) | List of account groups and account names | <pre>map(list(object({<br>    name         = string<br>    owner_iam_id = optional(string, "root")<br>    accounts     = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))<br>    account_groups = optional(list(object(<br>      { name     = string,<br>        accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))<br>        account_groups = optional(list(object({<br>          name     = string,<br>          accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))<br>          account_groups = optional(list(object(<br>          { name = string })))<br>        })))<br>    })))<br>    }))<br>  )</pre> | n/a | yes |
+| <a name="input_enterprise_json_input"></a> [enterprise\_json\_input](#input\_enterprise\_json\_input) | List of enterprise child account groups and account | <pre>list(object({<br>    accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))<br>    account_groups = optional(list(object(<br>      { name     = string,<br>        accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))<br>        account_groups = optional(list(object({<br>          name     = string,<br>          accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))<br>          account_groups = optional(list(object(<br>            { name           = string,<br>              accounts       = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))<br>              account_groups = optional(list(object({ name = string })))<br>          })))<br>        })))<br>    })))<br>  }))</pre> | n/a | yes |
 | <a name="input_enterprise_primary_contact_iam_id"></a> [enterprise\_primary\_contact\_iam\_id](#input\_enterprise\_primary\_contact\_iam\_id) | The IAM id of the parent Enterprise account owner. | `string` | n/a | yes |
 
 ### Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_enterprise_hierarchy_depth_0"></a> [enterprise\_hierarchy\_depth\_0](#output\_enterprise\_hierarchy\_depth\_0) | Enterprise input for depth 0 |
-| <a name="output_enterprise_hierarchy_depth_1"></a> [enterprise\_hierarchy\_depth\_1](#output\_enterprise\_hierarchy\_depth\_1) | Enterprise input for depth 1 |
-| <a name="output_enterprise_hierarchy_depth_2"></a> [enterprise\_hierarchy\_depth\_2](#output\_enterprise\_hierarchy\_depth\_2) | Enterprise input for depth 2 |
+No outputs.
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->

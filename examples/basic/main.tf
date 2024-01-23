@@ -8,7 +8,7 @@ module "enterprise" {
   source                            = "../.."
   enterprise_crn                    = data.ibm_enterprises.enterprise.enterprises[0].crn
   enterprise_primary_contact_iam_id = data.ibm_enterprises.enterprise.enterprises[0].primary_contact_iam_id
-  enterprise_json_input = {
+  enterprise_json_input = [{
     # Here is how to create a new account (not inside any account group)
     accounts = [{ name = "${var.prefix}_account" }]
     account_groups = [{
@@ -24,5 +24,5 @@ module "enterprise" {
       # name     = "${var.prefix}_account_group",
       # accounts = [{ name = "${var.prefix}_account" }]
     }]
-  }
+  }]
 }

@@ -1,10 +1,8 @@
 # for now added support for upto 3 level depth of enterprise hierarchy
 variable "enterprise_json_input" {
   description = "List of enterprise child account groups and account"
-  type = map(list(object({
-    name         = string
-    owner_iam_id = optional(string, "root")
-    accounts     = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
+  type = list(object({
+    accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
     account_groups = optional(list(object(
       { name     = string,
         accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
@@ -12,11 +10,13 @@ variable "enterprise_json_input" {
           name     = string,
           accounts = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
           account_groups = optional(list(object(
-          { name = string })))
+            { name           = string,
+              accounts       = optional(list(object({ name = string, owner_iam_id = optional(string, "root") })))
+              account_groups = optional(list(object({ name = string })))
+          })))
         })))
     })))
-    }))
-  )
+  }))
 }
 
 variable "enterprise_crn" {
