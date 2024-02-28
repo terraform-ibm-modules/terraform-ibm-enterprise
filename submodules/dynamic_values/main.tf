@@ -2,20 +2,20 @@
 // account_groups
 locals {
 
-  nested_account_groups = { for value in var.enterprise_json_input.account_groups :
+  nested_account_groups = { for value in var.enterprise_account_groups :
     value.key_name => value if(value.parent != null)
   }
 
-  nested_accounts = { for value in var.enterprise_json_input.accounts :
+  nested_accounts = { for value in var.enterprise_accounts :
     value.key_name => value if(value.parent != null)
   }
 
 
-  depth_0_account_groups = { for value in var.enterprise_json_input.account_groups :
+  depth_0_account_groups = { for value in var.enterprise_account_groups :
     value.key_name => value if(value.parent == null)
   }
 
-  depth_0_accounts = { for value in var.enterprise_json_input.accounts :
+  depth_0_accounts = { for value in var.enterprise_accounts :
     value.key_name => value if(value.parent == null)
   }
 

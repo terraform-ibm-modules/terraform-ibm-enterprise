@@ -1,6 +1,7 @@
 module "dynamic_values" {
   source                            = "./submodules/dynamic_values"
-  enterprise_json_input             = var.enterprise_json_input
+  enterprise_account_groups         = var.enterprise_account_groups
+  enterprise_accounts               = var.enterprise_accounts
   enterprise_crn                    = var.enterprise_crn
   enterprise_primary_contact_iam_id = var.enterprise_primary_contact_iam_id
 }
