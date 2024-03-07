@@ -40,13 +40,20 @@ module "enterprise" {
   source                            = "terraform-ibm-modules/terraform-ibm-enterprise"
   enterprise_crn                    = data.ibm_enterprises.enterprise.enterprises[0].crn
   enterprise_primary_contact_iam_id = data.ibm_enterprises.enterprise.enterprises[0].primary_contact_iam_id
-  enterprise_json_input             = {
-                                        account_groups = [{
-                                          name = "depth_0_account_group1"
-                                        }]
-                                        accounts = [{
-                                          name = "depth_0_account" },
-                                        ]}
+  enterprise_account_groups = [
+    {
+      key_name        = "group-key-1"
+      name            = "account_group_1"
+      parent_key_name = null
+  }]
+
+  enterprise_accounts = [
+    {
+      key_name        = "acct-key-1"
+      name            = "account_1"
+      parent_key_name = null
+    }
+  ]
                                       }
 ```
 
@@ -82,14 +89,17 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_enterprise_account_groups"></a> [enterprise\_account\_groups](#input\_enterprise\_account\_groups) | List of enterprise child account\_groups in the enterprise | `list(object({ name = string, key_name = string, parent = optional(string, null), owner_iam_id = optional(string, null) }))` | n/a | yes |
-| <a name="input_enterprise_accounts"></a> [enterprise\_accounts](#input\_enterprise\_accounts) | List of enterprise child accounts in the enterprise | `list(object({ name = string, key_name = string, parent = optional(string, null), owner_iam_id = optional(string, null) }))` | n/a | yes |
+| <a name="input_enterprise_account_groups"></a> [enterprise\_account\_groups](#input\_enterprise\_account\_groups) | List of enterprise child account\_groups in the enterprise | `list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null) }))` | n/a | yes |
+| <a name="input_enterprise_accounts"></a> [enterprise\_accounts](#input\_enterprise\_accounts) | List of enterprise child accounts in the enterprise | `list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null) }))` | n/a | yes |
 | <a name="input_enterprise_crn"></a> [enterprise\_crn](#input\_enterprise\_crn) | The CRN of the parent Enterprise account to use. | `string` | n/a | yes |
 | <a name="input_enterprise_primary_contact_iam_id"></a> [enterprise\_primary\_contact\_iam\_id](#input\_enterprise\_primary\_contact\_iam\_id) | The IAM id of the parent Enterprise account owner. | `string` | n/a | yes |
 
 ### Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_enterprise_account_groups"></a> [enterprise\_account\_groups](#output\_enterprise\_account\_groups) | List of account groups created in an Enterprise |
+| <a name="output_enterprise_accounts"></a> [enterprise\_accounts](#output\_enterprise\_accounts) | List of accounts created in an Enterprise |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->

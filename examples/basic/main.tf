@@ -10,16 +10,16 @@ module "enterprise" {
   enterprise_primary_contact_iam_id = data.ibm_enterprises.enterprise.enterprises[0].primary_contact_iam_id
   enterprise_account_groups = [
     {
-      key_name = "${var.prefix}-group-key-1"
-      name     = "${var.prefix}_account_group_1"
-      parent   = null
+      key_name        = "${var.prefix}-group-key-1"
+      name            = "${var.prefix}_account_group_1"
+      parent_key_name = null
   }]
 
   enterprise_accounts = [
     {
-      key_name = "${var.prefix}-acct-key-1"
-      name     = "${var.prefix}_account_1"
-      parent   = null
+      key_name        = "${var.prefix}-acct-key-1"
+      name            = "${var.prefix}_account_1"
+      parent_key_name = null
     }
   ]
 

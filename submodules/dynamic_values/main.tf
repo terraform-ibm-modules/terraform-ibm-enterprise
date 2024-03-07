@@ -3,43 +3,43 @@
 locals {
 
   nested_account_groups = { for value in var.enterprise_account_groups :
-    value.key_name => value if(value.parent != null)
+    value.key_name => value if(value.parent_key_name != null)
   }
 
   nested_accounts = { for value in var.enterprise_accounts :
-    value.key_name => value if(value.parent != null)
+    value.key_name => value if(value.parent_key_name != null)
   }
 
 
   depth_0_account_groups = { for value in var.enterprise_account_groups :
-    value.key_name => value if(value.parent == null)
+    value.key_name => value if(value.parent_key_name == null)
   }
 
   depth_0_accounts = { for value in var.enterprise_accounts :
-    value.key_name => value if(value.parent == null)
+    value.key_name => value if(value.parent_key_name == null)
   }
 
   depth_1_account_groups = {
     for value in local.nested_account_groups :
     value.key_name => value
-    if contains(keys(local.depth_0_account_groups), value.parent)
+    if contains(keys(local.depth_0_account_groups), value.parent_key_name)
   }
 
   depth_2_account_groups = {
     for value in local.nested_account_groups :
-    value.key_name => value if contains(keys(local.depth_1_account_groups), value.parent)
+    value.key_name => value if contains(keys(local.depth_1_account_groups), value.parent_key_name)
   }
 
   depth_1_accounts = {
     for value in local.nested_accounts :
     value.key_name => value
-    if contains(keys(local.depth_1_account_groups), value.parent)
+    if contains(keys(local.depth_1_account_groups), value.parent_key_name)
   }
 
   depth_2_accounts = {
     for value in local.nested_accounts :
     value.key_name => value
-    if contains(keys(local.depth_2_account_groups), value.parent)
+    if contains(keys(local.depth_2_account_groups), value.parent_key_name)
   }
 
   enterprise_hierarchy_depth_0 = {
