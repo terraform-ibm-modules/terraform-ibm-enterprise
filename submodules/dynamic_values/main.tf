@@ -33,13 +33,13 @@ locals {
   depth_1_accounts = {
     for value in local.nested_accounts :
     value.key_name => value
-    if contains(keys(local.depth_1_account_groups), value.parent_key_name)
+    if contains(keys(local.depth_0_account_groups), value.parent_key_name)
   }
 
   depth_2_accounts = {
     for value in local.nested_accounts :
     value.key_name => value
-    if contains(keys(local.depth_2_account_groups), value.parent_key_name)
+    if contains(keys(local.depth_1_account_groups), value.parent_key_name)
   }
 
   enterprise_hierarchy_depth_0 = {
