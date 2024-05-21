@@ -1,9 +1,10 @@
 variable "enterprise_hierarchy" {
   type = map(map(object({
-    name            = string
-    parent_key_name = optional(string, null)
-    owner_iam_id    = optional(string, null)
-    key_name        = string
+    name                   = string
+    parent_key_name        = optional(string, null)
+    owner_iam_id           = optional(string, null)
+    add_owner_iam_policies = optional(bool, false)
+    key_name               = string
   })))
   description = "tree based input for creating enterprise children"
 }
