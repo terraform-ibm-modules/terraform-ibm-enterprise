@@ -57,9 +57,7 @@ module "enterprise" {
       key_name        = "acct-key-2"
       name            = "account_2"
       parent_key_name = null
-      options {
-        add_owner_iam_policies =  true
-      }
+      add_owner_iam_policies =  true
     }
   ]
                                       }
