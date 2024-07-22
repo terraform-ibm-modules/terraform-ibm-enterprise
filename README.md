@@ -75,7 +75,7 @@ module "enterprise" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0, <1.7.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.65.0, < 2.0.0 |
 
 ### Modules
@@ -106,6 +106,7 @@ No resources.
 |------|-------------|
 | <a name="output_enterprise_account_groups"></a> [enterprise\_account\_groups](#output\_enterprise\_account\_groups) | List of account groups created in an Enterprise |
 | <a name="output_enterprise_accounts"></a> [enterprise\_accounts](#output\_enterprise\_accounts) | List of accounts created in an Enterprise |
+| <a name="output_enterprise_accounts_iam_response"></a> [enterprise\_accounts\_iam\_response](#output\_enterprise\_accounts\_iam\_response) | List of accounts created in an Enterprise |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- Leave this section as is so that your module has a link to local development environment set up steps for contributors to follow -->

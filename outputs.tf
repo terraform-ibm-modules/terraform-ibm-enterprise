@@ -44,3 +44,36 @@ output "enterprise_accounts" {
     }]
   ])
 }
+
+output "enterprise_accounts_iam_response" {
+  description = "List of accounts created in an Enterprise"
+  sensitive   = true
+  value = flatten([[for key, value in module.enterprise_hierarchy_depth_0.accounts : {
+    parent : value.parent,
+    name : value.name,
+    crn : value.crn,
+    owner_iam_id : value.owner_iam_id
+    iam_apikey : value.iam_apikey
+    iam_service_id : value.iam_service_id
+    iam_apikey_id : value.iam_apikey_id
+    }],
+    [for key, value in module.enterprise_hierarchy_depth_1.accounts : {
+      parent : value.parent,
+      name : value.name,
+      crn : value.crn,
+      owner_iam_id : value.owner_iam_id
+      iam_apikey : value.iam_apikey
+      iam_service_id : value.iam_service_id
+      iam_apikey_id : value.iam_apikey_id
+    }],
+    [for key, value in module.enterprise_hierarchy_depth_2.accounts : {
+      parent : value.parent,
+      name : value.name,
+      crn : value.crn,
+      owner_iam_id : value.owner_iam_id
+      iam_apikey : value.iam_apikey
+      iam_service_id : value.iam_service_id
+      iam_apikey_id : value.iam_apikey_id
+    }]
+  ])
+}
