@@ -17,6 +17,7 @@ This is a collection of sub modules and which will take tree based enterprise in
 * [Examples](./examples)
     * [Advanced example](./examples/advanced)
     * [Basic example](./examples/basic)
+    * [Complete example to create4 enterprise child account with owner IAM policies](./examples/complete)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
@@ -57,7 +58,7 @@ module "enterprise" {
       key_name        = "acct-key-2"
       name            = "account_2"
       parent_key_name = null
-      add_owner_iam_policies =  true
+      add_owner_iam_policies =  true # this field enable child account to have IAM_APIKey with owner IAM policies
     }
   ]
                                       }
