@@ -17,7 +17,6 @@ This is a collection of sub modules and which will take tree based enterprise in
 * [Examples](./examples)
     * [Advanced example](./examples/advanced)
     * [Basic example](./examples/basic)
-    * [Complete example to create4 enterprise child account with owner IAM policies](./examples/complete)
 * [Contributing](#contributing)
 <!-- END OVERVIEW HOOK -->
 
