@@ -56,6 +56,7 @@ func setupAdvancedOptions(t *testing.T, prefix string, dir string) *testhelper.T
 		"enterprise_name":             "DAF Enterprise",
 		"existing_sm_instance_guid":   permanentResources["secretsManagerGuid"],
 		"existing_sm_instance_region": permanentResources["secretsManagerRegion"],
+		"UpgradeTestSkipped":          true,
 	}
 
 	return options
