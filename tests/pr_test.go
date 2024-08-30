@@ -84,7 +84,7 @@ func TestRunAdvancedExample(t *testing.T) {
 func TestRunUpgradeAdvancedExample(t *testing.T) {
 	t.Parallel()
 
-	options := setupOptions(t, "enterprise-upg", advancedExampleDir)
+	options := setupAdvancedOptions(t, "enterprise-upg", advancedExampleDir)
 
 	output, err := options.RunTestUpgrade()
 	if !options.UpgradeTestSkipped {
