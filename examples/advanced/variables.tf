@@ -32,3 +32,9 @@ variable "region" {
   description = "Region to provision all resources created by this example."
   default     = "us-south"
 }
+
+variable "resource_group" {
+  type        = string
+  description = "Name of the resource group to use for this example. If not set, a resource group is created."
+  default     = null
+}
