@@ -87,7 +87,7 @@ module "secrets_manager_group" {
 
 module "secrets_manager_arbitrary_secret" {
   source                  = "terraform-ibm-modules/secrets-manager-secret/ibm"
-  version                 = "1.3.2"
+  version                 = "1.3.3"
   region                  = local.sm_region
   secrets_manager_guid    = local.sm_guid
   secret_group_id         = module.secrets_manager_group.secret_group_id
