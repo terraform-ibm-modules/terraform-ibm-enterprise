@@ -1,13 +1,13 @@
 # Lookup data from given enterprise account
-data "ibm_enterprises" "enterprise" {
-  name = var.enterprise_name
+data "ibm_enterprise_accounts" "enterprise_accounts" {
+  name = var.enterprise_account_name
 }
 
 # Call root level module to create a hierarchy of enterprise child accounts and account groups
 module "enterprise" {
   source                            = "../.."
-  enterprise_crn                    = data.ibm_enterprises.enterprise.enterprises[0].crn
-  enterprise_primary_contact_iam_id = data.ibm_enterprises.enterprise.enterprises[0].primary_contact_iam_id
+  enterprise_crn                    = data.ibm_enterprise_accounts.enterprise_accounts.accounts[0].parent
+  enterprise_primary_contact_iam_id = data.ibm_enterprise_accounts.enterprise_accounts.accounts[0].owner_iam_id
   enterprise_account_groups = [
     {
       key_name        = "${var.prefix}-group-key-1"
@@ -32,6 +32,62 @@ module "enterprise" {
       parent_key_name = null
     }
   ]
+}
+
+locals {
+
+  sub_account_users_to_invite = {
+    "${var.prefix}_account_1" = ["mukul.palit@ibm.com"]
+    "${var.prefix}_account_2" = ["mukul.palit@ibm.com"]
+  }
+
+  account_ids = [
+    for account in module.enterprise.enterprise_accounts_iam_response : account.id
+  ]
+  # Filter and transform only those accounts whose name matches sub_account_users_to_invite
+  matched_account_user_map = {
+    for account in module.enterprise.enterprise_accounts_iam_response :
+    account.name => {
+      users          = local.sub_account_users_to_invite[account.name]
+      id             = account.id
+      iam_apikey     = account.iam_apikey
+      iam_service_id = account.iam_service_id
+    }
+    if contains(keys(local.sub_account_users_to_invite), account.name)
+  }
+}
+
+module "invite_user_trusted_profile_template" {
+  source                      = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
+  version                     = "3.1.0"
+  template_name               = "Test Template"
+  template_description        = "Trusted Profile template for Enterpise sub accounts with required access for inviting users"
+  profile_name                = "Test Profile"
+  profile_description         = "Trusted Profile for Enterpise sub accounts with required access for inviting users"
+  identities                  = []
+  account_group_ids_to_assign = []
+  account_ids_to_assign       = local.account_ids
+  policy_templates = [
+    {
+      name        = "identity-access"
+      description = "Policy template for identity services"
+      roles       = ["Administrator"]
+      attributes = [{
+        key      = "service_group_id"
+        value    = "IAM" # assigns access to All Identity and Access enabled services
+        operator = "stringEquals"
+      }]
+    }
+  ]
+}
+
+module "invite_users" {
+  source             = "../../modules/subaccount_invite"
+  for_each           = local.matched_account_user_map
+  account_id         = each.value.id
+  users_to_invite    = local.sub_account_users_to_invite
+  account_iam_apikey = each.value.iam_apikey
+  access_group_name  = "inital-access-group"
 }
 
 ########################################################################################################################

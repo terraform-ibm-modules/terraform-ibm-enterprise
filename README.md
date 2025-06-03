@@ -14,6 +14,9 @@ This is a collection of sub modules and which will take tree based enterprise in
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
 * [terraform-ibm-enterprise](#terraform-ibm-enterprise)
+* [Submodules](./modules)
+    * [dynamic_values](./modules/dynamic_values)
+    * [enterprise_hierarchy](./modules/enterprise_hierarchy)
 * [Examples](./examples)
     * [Advanced example](./examples/advanced)
     * [Basic example](./examples/basic)
@@ -82,10 +85,10 @@ module "enterprise" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_dynamic_values"></a> [dynamic\_values](#module\_dynamic\_values) | ./submodules/dynamic_values | n/a |
-| <a name="module_enterprise_hierarchy_depth_0"></a> [enterprise\_hierarchy\_depth\_0](#module\_enterprise\_hierarchy\_depth\_0) | ./submodules/enterprise_hierarchy | n/a |
-| <a name="module_enterprise_hierarchy_depth_1"></a> [enterprise\_hierarchy\_depth\_1](#module\_enterprise\_hierarchy\_depth\_1) | ./submodules/enterprise_hierarchy | n/a |
-| <a name="module_enterprise_hierarchy_depth_2"></a> [enterprise\_hierarchy\_depth\_2](#module\_enterprise\_hierarchy\_depth\_2) | ./submodules/enterprise_hierarchy | n/a |
+| <a name="module_dynamic_values"></a> [dynamic\_values](#module\_dynamic\_values) | ./modules/dynamic_values | n/a |
+| <a name="module_enterprise_hierarchy_depth_0"></a> [enterprise\_hierarchy\_depth\_0](#module\_enterprise\_hierarchy\_depth\_0) | ./modules/enterprise_hierarchy | n/a |
+| <a name="module_enterprise_hierarchy_depth_1"></a> [enterprise\_hierarchy\_depth\_1](#module\_enterprise\_hierarchy\_depth\_1) | ./modules/enterprise_hierarchy | n/a |
+| <a name="module_enterprise_hierarchy_depth_2"></a> [enterprise\_hierarchy\_depth\_2](#module\_enterprise\_hierarchy\_depth\_2) | ./modules/enterprise_hierarchy | n/a |
 
 ### Resources
 
