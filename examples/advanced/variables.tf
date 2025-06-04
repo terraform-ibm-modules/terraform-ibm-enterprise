@@ -10,7 +10,7 @@ variable "prefix" {
   default     = "tf-ibm"
 }
 
-variable "enterprise_name" {
+variable "enterprise_account_name" {
   description = "Name of the enterprise account"
   type        = string
 }

@@ -1,5 +1,5 @@
 module "dynamic_values" {
-  source                            = "./submodules/dynamic_values"
+  source                            = "./modules/dynamic_values"
   enterprise_account_groups         = var.enterprise_account_groups
   enterprise_accounts               = var.enterprise_accounts
   enterprise_crn                    = var.enterprise_crn
@@ -7,7 +7,7 @@ module "dynamic_values" {
 }
 
 module "enterprise_hierarchy_depth_0" {
-  source                            = "./submodules/enterprise_hierarchy"
+  source                            = "./modules/enterprise_hierarchy"
   enterprise_hierarchy              = module.dynamic_values.enterprise_hierarchy_depth_0
   parent_account_groups             = null
   enterprise_crn                    = var.enterprise_crn
@@ -15,7 +15,7 @@ module "enterprise_hierarchy_depth_0" {
 }
 
 module "enterprise_hierarchy_depth_1" {
-  source                            = "./submodules/enterprise_hierarchy"
+  source                            = "./modules/enterprise_hierarchy"
   enterprise_hierarchy              = module.dynamic_values.enterprise_hierarchy_depth_1
   parent_account_groups             = module.enterprise_hierarchy_depth_0.account_groups
   enterprise_crn                    = var.enterprise_crn
@@ -23,7 +23,7 @@ module "enterprise_hierarchy_depth_1" {
 }
 
 module "enterprise_hierarchy_depth_2" {
-  source                            = "./submodules/enterprise_hierarchy"
+  source                            = "./modules/enterprise_hierarchy"
   enterprise_hierarchy              = module.dynamic_values.enterprise_hierarchy_depth_2
   parent_account_groups             = module.enterprise_hierarchy_depth_1.account_groups
   enterprise_crn                    = var.enterprise_crn
