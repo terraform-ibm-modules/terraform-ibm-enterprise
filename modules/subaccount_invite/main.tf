@@ -1,6 +1,6 @@
 resource "ibm_iam_access_group" "init_access_group" {
   name        = var.access_group_name
-  description = "Restricted for automation to manage resources in the account via terraform/automation"
+  description = "Initial access group for assigning newly invited users."
 }
 
 resource "ibm_iam_access_group_policy" "crew_init_service_id_user_api_key_creator_policy" {
@@ -46,8 +46,8 @@ resource "ibm_iam_access_group_policy" "crew_init_secrets_manager_policy" {
 }
 
 resource "ibm_iam_access_group_template" "initial_access_group_template" {
-  name        = "initial-access-group"
-  description = "The initial access group for assigning to newly invited users."
+  name        = "initial-access-group-template"
+  description = "The initial access group template for assigning to newly invited users."
   group {
     name        = "add-users"
     description = "Add new users"

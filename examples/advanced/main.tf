@@ -60,9 +60,9 @@ locals {
 module "invite_user_trusted_profile_template" {
   source                      = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
   version                     = "3.1.0"
-  template_name               = "Test Template"
+  template_name               = "Invite User Trusted Template"
   template_description        = "Trusted Profile template for Enterpise sub accounts with required access for inviting users"
-  profile_name                = "Test Profile"
+  profile_name                = "Invite User Trusted Profile"
   profile_description         = "Trusted Profile for Enterpise sub accounts with required access for inviting users"
   identities                  = []
   account_group_ids_to_assign = []
