@@ -8,5 +8,9 @@ terraform {
       source  = "IBM-Cloud/ibm"
       version = "1.65.0"
     }
+    external = {
+      source  = "hashicorp/external"
+      version = "~> 2.3.2"
+    }
   }
 }

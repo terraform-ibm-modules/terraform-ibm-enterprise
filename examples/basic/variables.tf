@@ -10,7 +10,12 @@ variable "prefix" {
   default     = "enterprise"
 }
 
-variable "enterprise_name" {
+variable "enterprise_account_name" {
   description = "Name of the enterprise account"
   type        = string
+}
+
+variable "ibmcloud_enterprise_account_id" {
+  type        = string
+  description = "The account ID for the DAF Enterprise account."
 }

@@ -15,10 +15,9 @@ This is a collection of sub modules and which will take tree based enterprise in
 ## Overview
 * [terraform-ibm-enterprise](#terraform-ibm-enterprise)
 * [Submodules](./modules)
+    * [account_invite](./modules/account_invite)
     * [dynamic_values](./modules/dynamic_values)
     * [enterprise_hierarchy](./modules/enterprise_hierarchy)
-    * [initial_new_user_access](./modules/initial_new_user_access)
-    * [subaccount_invite](./modules/subaccount_invite)
 * [Examples](./examples)
     * [Advanced example](./examples/advanced)
     * [Basic example](./examples/basic)

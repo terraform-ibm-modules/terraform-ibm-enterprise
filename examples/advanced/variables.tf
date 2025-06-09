@@ -18,7 +18,6 @@ variable "prefix" {
 variable "enterprise_account_name" {
   description = "Name of the enterprise account"
   type        = string
-  default     = "DAF Enterprise"
 }
 
 variable "existing_sm_instance_guid" {

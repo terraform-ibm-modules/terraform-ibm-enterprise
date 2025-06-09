@@ -57,7 +57,7 @@ module "enterprise" {
 }
 
 ########################################################################################################################
-# Trusted Profile and Access Group Template
+# Trusted Profile Template and Template Assignment
 ########################################################################################################################
 
 locals {
@@ -123,30 +123,168 @@ resource "ibm_iam_trusted_profile_template_assignment" "account_assignment_for_n
   }
 }
 
-# Creating access group template with all the initial access needed for the new user
-module "create_initial_access" {
-  source                            = "../../modules/initial_new_user_access"
-  access_group_template_name        = "initial-access-group-template"
-  access_group_template_description = "The access group template for sub accounts to assign access to new users being invited to the sub account"
-  access_group_name                 = "new-user-access"
-  access_group_description          = "The access group to be assigned to the new users being invited to the sub account"
+########################################################################################################################
+# IAM Policy Template and Access Group Template
+########################################################################################################################
+
+resource "ibm_iam_policy_template" "init_service_id_user_api_key_creator_policy_template" {
+  name        = "init-service-id-user-api-key-creator-policy"
+  description = "Policy template for service ID and user API key creation."
+  committed   = true
+
+  policy {
+    type  = "access"
+    roles = ["Administrator", "Service ID creator", "User API key creator"]
+    resource {
+      attributes {
+        key      = "serviceName"
+        value    = "iam-identity"
+        operator = "stringEquals"
+      }
+    }
+  }
+}
+
+resource "ibm_iam_policy_template" "init_all_services_policy_template" {
+  name        = "init-all-services-policy"
+  description = "Policy template for all services."
+  committed   = true
+
+  policy {
+    type  = "access"
+    roles = ["Administrator", "Manager"]
+    resource {
+      attributes {
+        key      = "serviceType"
+        value    = "service" # This explicitly refers to "All IAM-enabled services" (user-provisioned services)
+        operator = "stringEquals"
+      }
+    }
+  }
+}
+
+resource "ibm_iam_policy_template" "init_all_platform_services_policy_template" {
+  name        = "init-all-platform-services-policy"
+  description = "Policy template for all platform services."
+  committed   = true
+
+  policy {
+    type  = "access"
+    roles = ["Administrator"]
+    resource {
+      attributes {
+        key      = "serviceType"
+        value    = "platform_service"
+        operator = "stringEquals"
+      }
+    }
+  }
+}
+
+resource "ibm_iam_policy_template" "init_resource_group_policy_template" {
+  name        = "init-resource-group-policy"
+  description = "Policy template for resource groups."
+  committed   = true
+
+  policy {
+    type  = "access"
+    roles = ["Administrator"]
+    resource {
+      attributes {
+        key      = "resourceType"
+        value    = "resource-group"
+        operator = "stringEquals"
+      }
+    }
+  }
+}
+
+resource "ibm_iam_policy_template" "init_secrets_manager_policy_template" {
+  name        = "init-secrets-manager-policy"
+  description = "Policy template for Secrets Manager."
+  committed   = true
+
+  policy {
+    type  = "access"
+    roles = ["Viewer", "Writer", "Reader", "SecretsReader"]
+    resource {
+      attributes {
+        key      = "serviceName"
+        value    = "secrets-manager"
+        operator = "stringEquals"
+      }
+    }
+  }
+}
+
+resource "ibm_iam_access_group_template" "initial_access_group_template" {
+  depends_on = [
+    ibm_iam_policy_template.init_service_id_user_api_key_creator_policy_template,
+    ibm_iam_policy_template.init_all_services_policy_template,
+    ibm_iam_policy_template.init_all_platform_services_policy_template,
+    ibm_iam_policy_template.init_resource_group_policy_template,
+    ibm_iam_policy_template.init_secrets_manager_policy_template
+  ]
+
+  name        = "initial-access-group-template"
+  description = "The access group template for sub accounts to assign access to new users being invited to the sub account"
+  group {
+    name        = "new-user-access"
+    description = "The access group to be assigned to the new users being invited to the sub account"
+    action_controls {
+      access {
+        add = true
+      }
+    }
+    members {
+      action_controls {
+        add    = true
+        remove = true
+      }
+    }
+  }
+
+  policy_template_references {
+    id      = split("/", ibm_iam_policy_template.init_service_id_user_api_key_creator_policy_template.id)[0]
+    version = ibm_iam_policy_template.init_service_id_user_api_key_creator_policy_template.version
+  }
+  policy_template_references {
+    id      = split("/", ibm_iam_policy_template.init_all_services_policy_template.id)[0]
+    version = ibm_iam_policy_template.init_all_services_policy_template.version
+  }
+  policy_template_references {
+    id      = split("/", ibm_iam_policy_template.init_all_platform_services_policy_template.id)[0]
+    version = ibm_iam_policy_template.init_all_platform_services_policy_template.version
+  }
+  policy_template_references {
+    id      = split("/", ibm_iam_policy_template.init_resource_group_policy_template.id)[0]
+    version = ibm_iam_policy_template.init_resource_group_policy_template.version
+  }
+  policy_template_references {
+    id      = split("/", ibm_iam_policy_template.init_secrets_manager_policy_template.id)[0]
+    version = ibm_iam_policy_template.init_secrets_manager_policy_template.version
+  }
+  committed = true
 }
 
 ########################################################################################################################
-# Inviting Users to Sub Account
+# Assigning Access Group Template and Inviting Users to Sub Account
 ########################################################################################################################
 
 module "invite_users" {
-  depends_on                    = [module.enterprise, module.create_trusted_profile_template, ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts, module.create_initial_access]
-  source                        = "../../modules/subaccount_invite"
+  depends_on = [module.enterprise,
+    module.create_trusted_profile_template,
+    ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts,
+  ibm_iam_access_group_template.initial_access_group_template]
+  source                        = "../../modules/account_invite"
   for_each                      = { for account in local.filtered_enterprise_accounts : account.name => account }
   account_id                    = each.value.id
   users_to_invite               = local.sub_account_users_to_invite[each.key]
   account_iam_apikey            = each.value.iam_apikey
   account_service_id            = replace(each.value.iam_service_id, "iam-", "")
-  access_group_name             = module.create_initial_access.template_access_group_name
-  access_group_template_id      = module.create_initial_access.template_id
-  access_group_template_version = module.create_initial_access.template_version
+  access_group_name             = ibm_iam_access_group_template.initial_access_group_template.group[0].name
+  access_group_template_id      = ibm_iam_access_group_template.initial_access_group_template.id
+  access_group_template_version = ibm_iam_access_group_template.initial_access_group_template.version
   trusted_profile_name          = var.trusted_profile_name
 }
 
