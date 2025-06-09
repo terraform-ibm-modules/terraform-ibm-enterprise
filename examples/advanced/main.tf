@@ -3,6 +3,16 @@ data "ibm_enterprise_accounts" "enterprise_accounts" {
   name = var.enterprise_account_name
 }
 
+# Fetch the IBM_id from cloud api key to be used as the owner for the new sub accounts to be created
+data "external" "get_iam_id" {
+  program = ["bash", "-c", "chmod +x ${path.module}/get_iam_id.sh && ${path.module}/get_iam_id.sh"]
+
+  query = {
+    ibmcloud_api_key    = var.ibmcloud_api_key
+    ibmcloud_account_id = var.ibmcloud_enterprise_account_id
+  }
+}
+
 # Call root level module to create a hierarchy of enterprise child accounts and account groups
 module "enterprise" {
   source                            = "../.."
@@ -13,64 +23,76 @@ module "enterprise" {
       key_name        = "${var.prefix}-group-key-1"
       name            = "${var.prefix}_account_group_1"
       parent_key_name = null
+      owner_iam_id    = data.external.get_iam_id.result.iam_id
     },
     {
       key_name        = "${var.prefix}-group-key-2"
       name            = "${var.prefix}_account_group_2"
       parent_key_name = "${var.prefix}-group-key-1"
+      owner_iam_id    = data.external.get_iam_id.result.iam_id
   }]
   enterprise_accounts = [
     {
-      key_name               = "${var.prefix}-acc-key-1"
+      key_name               = "${var.prefix}-account-key-1"
       name                   = "${var.prefix}_account_1"
       parent_key_name        = null
       add_owner_iam_policies = true # this field enable child account to have IAM_APIKey with owner IAM policies
+      owner_iam_id           = data.external.get_iam_id.result.iam_id
     },
     {
-      key_name        = "${var.prefix}-acc-key-2"
-      name            = "${var.prefix}_account_2"
-      parent_key_name = null
+      key_name               = "${var.prefix}-account-key-2"
+      name                   = "${var.prefix}_account_2"
+      parent_key_name        = null
+      add_owner_iam_policies = true
+      owner_iam_id           = data.external.get_iam_id.result.iam_id
+    },
+    {
+      key_name               = "${var.prefix}-account-key-3"
+      name                   = "${var.prefix}_account_3"
+      parent_key_name        = null
+      add_owner_iam_policies = true
+      owner_iam_id           = data.external.get_iam_id.result.iam_id
     }
   ]
 }
+
+########################################################################################################################
+# Trusted Profile and Access Group Template
+########################################################################################################################
 
 locals {
 
   sub_account_users_to_invite = {
-    "${var.prefix}_account_1" = ["mukul.palit@ibm.com"]
-    "${var.prefix}_account_2" = ["mukul.palit@ibm.com"]
+    "${var.prefix}_account_1" = ["mukul.palit@ibm.com", "vipin.kumar17@ibm.com", "aayush.abhyarthi@ibm.com"]
+    "${var.prefix}_account_3" = ["mukul.palit@ibm.com", "aashiq.jacob@ibm.com", "arya.girish.k@ibm.com"]
   }
 
-  account_ids = [
-    for account in module.enterprise.enterprise_accounts_iam_response : account.id
-  ]
-  # Filter and transform only those accounts whose name matches sub_account_users_to_invite
-  matched_account_user_map = {
+  filtered_enterprise_accounts = [
     for account in module.enterprise.enterprise_accounts_iam_response :
-    account.name => {
-      users          = local.sub_account_users_to_invite[account.name]
-      id             = account.id
-      iam_apikey     = account.iam_apikey
-      iam_service_id = account.iam_service_id
-    }
-    if contains(keys(local.sub_account_users_to_invite), account.name)
-  }
+    account if contains(keys(local.sub_account_users_to_invite), account.name)
+  ]
 }
 
-module "invite_user_trusted_profile_template" {
-  source                      = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
-  version                     = "3.1.0"
-  template_name               = "Invite User Trusted Template"
-  template_description        = "Trusted Profile template for Enterpise sub accounts with required access for inviting users"
-  profile_name                = "Invite User Trusted Profile"
-  profile_description         = "Trusted Profile for Enterpise sub accounts with required access for inviting users"
-  identities                  = []
+module "create_trusted_profile_template" {
+  source               = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
+  version              = "3.1.0"
+  template_name        = "enable-service-id-to-invite-users-template"
+  template_description = "Trusted Profile template for Enterpise with required access for inviting users"
+  profile_name         = var.trusted_profile_name
+  profile_description  = "Trusted Profile for Enterpise sub accounts with required access for inviting users"
+  identities = [
+    for account in local.filtered_enterprise_accounts : {
+      type       = "serviceid"
+      iam_id     = account.iam_service_id
+      identifier = replace(account.iam_service_id, "iam-", "")
+    }
+  ]
   account_group_ids_to_assign = []
-  account_ids_to_assign       = local.account_ids
+  account_ids_to_assign       = []
   policy_templates = [
     {
-      name        = "identity-access"
-      description = "Policy template for identity services"
+      name        = "iam-admin-access"
+      description = "Grants Administrator role to all Identity and Access enabled services (IAM service group)."
       roles       = ["Administrator"]
       attributes = [{
         key      = "service_group_id"
@@ -81,13 +103,51 @@ module "invite_user_trusted_profile_template" {
   ]
 }
 
+resource "time_sleep" "sleep_time" {
+  depends_on      = [module.create_trusted_profile_template]
+  create_duration = "60s"
+}
+
+# Since the number of sub accounts created is not known during the planning phase therefore assignment has to be done separately
+resource "ibm_iam_trusted_profile_template_assignment" "account_assignment_for_new_accounts" {
+  depends_on = [time_sleep.sleep_time, module.enterprise]
+  count      = length(local.filtered_enterprise_accounts)
+
+  template_id      = module.create_trusted_profile_template.trusted_profile_template_id
+  template_version = module.create_trusted_profile_template.trusted_profile_template_version
+  target           = local.filtered_enterprise_accounts[count.index].id
+  target_type      = "Account"
+
+  provisioner "local-exec" {
+    command = "echo Assigned template to Account: ${local.filtered_enterprise_accounts[count.index].id}"
+  }
+}
+
+# Creating access group template with all the initial access needed for the new user
+module "create_initial_access" {
+  source                            = "../../modules/initial_new_user_access"
+  access_group_template_name        = "initial-access-group-template"
+  access_group_template_description = "The access group template for sub accounts to assign access to new users being invited to the sub account"
+  access_group_name                 = "new-user-access"
+  access_group_description          = "The access group to be assigned to the new users being invited to the sub account"
+}
+
+########################################################################################################################
+# Inviting Users to Sub Account
+########################################################################################################################
+
 module "invite_users" {
-  source             = "../../modules/subaccount_invite"
-  for_each           = local.matched_account_user_map
-  account_id         = each.value.id
-  users_to_invite    = local.sub_account_users_to_invite
-  account_iam_apikey = each.value.iam_apikey
-  access_group_name  = "inital-access-group"
+  depends_on                    = [module.enterprise, module.create_trusted_profile_template, ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts, module.create_initial_access]
+  source                        = "../../modules/subaccount_invite"
+  for_each                      = { for account in local.filtered_enterprise_accounts : account.name => account }
+  account_id                    = each.value.id
+  users_to_invite               = local.sub_account_users_to_invite[each.key]
+  account_iam_apikey            = each.value.iam_apikey
+  account_service_id            = replace(each.value.iam_service_id, "iam-", "")
+  access_group_name             = module.create_initial_access.template_access_group_name
+  access_group_template_id      = module.create_initial_access.template_id
+  access_group_template_version = module.create_initial_access.template_version
+  trusted_profile_name          = var.trusted_profile_name
 }
 
 ########################################################################################################################

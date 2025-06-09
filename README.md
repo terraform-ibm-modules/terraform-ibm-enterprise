@@ -17,6 +17,8 @@ This is a collection of sub modules and which will take tree based enterprise in
 * [Submodules](./modules)
     * [dynamic_values](./modules/dynamic_values)
     * [enterprise_hierarchy](./modules/enterprise_hierarchy)
+    * [initial_new_user_access](./modules/initial_new_user_access)
+    * [subaccount_invite](./modules/subaccount_invite)
 * [Examples](./examples)
     * [Advanced example](./examples/advanced)
     * [Basic example](./examples/basic)
