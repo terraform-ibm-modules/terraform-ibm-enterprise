@@ -15,7 +15,7 @@ variable "enterprise_account_name" {
   type        = string
 }
 
-variable "ibmcloud_enterprise_account_id" {
+variable "owner_iam_id" {
+  description = "The IAM ID of the user to be assigned as the owner for the sub accounts"
   type        = string
-  description = "The account ID for the DAF Enterprise account."
 }

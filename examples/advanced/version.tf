@@ -8,13 +8,5 @@ terraform {
       source  = "IBM-Cloud/ibm"
       version = ">= 1.65.0, < 2.0.0"
     }
-    time = {
-      source  = "hashicorp/time"
-      version = "~> 0.13.0"
-    }
-    external = {
-      source  = "hashicorp/external"
-      version = "~> 2.3.2"
-    }
   }
 }

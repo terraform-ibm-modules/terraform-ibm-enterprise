@@ -37,9 +37,9 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 	})
 
 	options.TerraformVars = map[string]interface{}{
-		"prefix":                         options.Prefix,
-		"enterprise_account_name":        "DAF Enterprise",
-		"ibmcloud_enterprise_account_id": "1f27e30e31f0486980cb0b2657d483f7", // pragma: allowlist secret
+		"prefix":                  options.Prefix,
+		"enterprise_account_name": "DAF Enterprise",
+		"owner_iam_id":            "IBMid-666000KAO3", // iam_id for GoldenEye Development
 	}
 
 	return options
@@ -53,11 +53,15 @@ func setupAdvancedOptions(t *testing.T, prefix string, dir string) *testhelper.T
 	})
 
 	options.TerraformVars = map[string]interface{}{
-		"prefix":                         options.Prefix,
-		"enterprise_account_name":        "DAF Enterprise",
-		"ibmcloud_enterprise_account_id": "1f27e30e31f0486980cb0b2657d483f7", // pragma: allowlist secret
-		"existing_sm_instance_guid":      permanentResources["secretsManagerGuid"],
-		"existing_sm_instance_region":    permanentResources["secretsManagerRegion"],
+		"prefix":                  options.Prefix,
+		"enterprise_account_name": "DAF Enterprise",
+		"owner_iam_id":            "IBMid-666000KAO3", // iam_id for GoldenEye Development
+		"sub_account_users_to_invite": map[string][]string{
+			"account_1": {"goldeneye.operations@ibm.com"},
+			"account_2": {"goldeneye.operations@ibm.com"},
+		},
+		"existing_sm_instance_guid":   permanentResources["secretsManagerGuid"],
+		"existing_sm_instance_region": permanentResources["secretsManagerRegion"],
 	}
 
 	return options
@@ -77,24 +81,6 @@ func TestRunAdvancedExample(t *testing.T) {
 	t.Parallel()
 
 	options := setupAdvancedOptions(t, "enterprise-com", advancedExampleDir)
-
-	// need to do setup so that TerraformOptions is created
-	options.TestSetup()
-
-	// save the current parallelism value, we will reset to this value later
-	currentParallelValue := options.TerraformOptions.Parallelism
-	t.Logf("Terratest Parallelism currently set to %d, replacing with 1 for single-threaded apply", currentParallelValue)
-	options.TerraformOptions.Parallelism = 1
-
-	// after apply, set parallelism back to default to help quicken remaining steps
-	options.PostApplyHook = func(options *testhelper.TestOptions) error {
-		t.Logf("Terratest Parallelism will be switched back to %d from single-threaded", currentParallelValue)
-		options.TerraformOptions.Parallelism = currentParallelValue
-		return nil
-	}
-
-	// turn off test setup, already done
-	options.SkipTestSetup = true
 
 	// now do full test single-threaded
 	output, err := options.RunTestConsistency()

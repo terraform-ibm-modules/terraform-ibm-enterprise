@@ -4,11 +4,6 @@ variable "ibmcloud_api_key" {
   sensitive   = true
 }
 
-variable "ibmcloud_enterprise_account_id" {
-  type        = string
-  description = "The account ID for the DAF Enterprise account."
-}
-
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
@@ -44,8 +39,13 @@ variable "resource_group" {
   default     = null
 }
 
-variable "trusted_profile_name" {
+variable "sub_account_users_to_invite" {
+  description = "A map defining sub-account names and the list of users to invite to each."
+  type        = map(list(string))
+}
+
+
+variable "owner_iam_id" {
+  description = "The IAM ID of the user to be assigned as the owner for the sub account"
   type        = string
-  description = "Name of the trusted profile under the template that will be reflected in the sub account"
-  default     = "enable-service-id-to-invite-users"
 }

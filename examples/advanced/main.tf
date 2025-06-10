@@ -3,16 +3,6 @@ data "ibm_enterprise_accounts" "enterprise_accounts" {
   name = var.enterprise_account_name
 }
 
-# Fetch the IBM_id from cloud api key to be used as the owner for the new sub accounts to be created
-data "external" "get_iam_id" {
-  program = ["bash", "-c", "chmod +x ${path.module}/get_iam_id.sh && ${path.module}/get_iam_id.sh"]
-
-  query = {
-    ibmcloud_api_key    = var.ibmcloud_api_key
-    ibmcloud_account_id = var.ibmcloud_enterprise_account_id
-  }
-}
-
 # Call root level module to create a hierarchy of enterprise child accounts and account groups
 module "enterprise" {
   source                            = "../.."
@@ -23,35 +13,28 @@ module "enterprise" {
       key_name        = "${var.prefix}-group-key-1"
       name            = "${var.prefix}_account_group_1"
       parent_key_name = null
-      owner_iam_id    = data.external.get_iam_id.result.iam_id
+      owner_iam_id    = var.owner_iam_id
     },
     {
       key_name        = "${var.prefix}-group-key-2"
       name            = "${var.prefix}_account_group_2"
       parent_key_name = "${var.prefix}-group-key-1"
-      owner_iam_id    = data.external.get_iam_id.result.iam_id
+      owner_iam_id    = var.owner_iam_id
   }]
   enterprise_accounts = [
     {
-      key_name               = "${var.prefix}-account-key-1"
+      key_name               = "${var.prefix}-acc-key-1"
       name                   = "${var.prefix}_account_1"
       parent_key_name        = null
       add_owner_iam_policies = true # this field enable child account to have IAM_APIKey with owner IAM policies
-      owner_iam_id           = data.external.get_iam_id.result.iam_id
+      owner_iam_id           = var.owner_iam_id
     },
     {
-      key_name               = "${var.prefix}-account-key-2"
+      key_name               = "${var.prefix}-acc-key-2"
       name                   = "${var.prefix}_account_2"
       parent_key_name        = null
       add_owner_iam_policies = true
-      owner_iam_id           = data.external.get_iam_id.result.iam_id
-    },
-    {
-      key_name               = "${var.prefix}-account-key-3"
-      name                   = "${var.prefix}_account_3"
-      parent_key_name        = null
-      add_owner_iam_policies = true
-      owner_iam_id           = data.external.get_iam_id.result.iam_id
+      owner_iam_id           = var.owner_iam_id
     }
   ]
 }
@@ -60,28 +43,15 @@ module "enterprise" {
 # Trusted Profile Template and Template Assignment
 ########################################################################################################################
 
-locals {
-
-  sub_account_users_to_invite = {
-    "${var.prefix}_account_1" = ["mukul.palit@ibm.com", "vipin.kumar17@ibm.com", "aayush.abhyarthi@ibm.com"]
-    "${var.prefix}_account_3" = ["mukul.palit@ibm.com", "aashiq.jacob@ibm.com", "arya.girish.k@ibm.com"]
-  }
-
-  filtered_enterprise_accounts = [
-    for account in module.enterprise.enterprise_accounts_iam_response :
-    account if contains(keys(local.sub_account_users_to_invite), account.name)
-  ]
-}
-
 module "create_trusted_profile_template" {
   source               = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
   version              = "3.1.0"
-  template_name        = "enable-service-id-to-invite-users-template"
+  template_name        = "${var.prefix}-enable-service-id-to-invite-users-template"
   template_description = "Trusted Profile template for Enterpise with required access for inviting users"
-  profile_name         = var.trusted_profile_name
+  profile_name         = "${var.prefix}-enable-service-id-to-invite-users"
   profile_description  = "Trusted Profile for Enterpise sub accounts with required access for inviting users"
   identities = [
-    for account in local.filtered_enterprise_accounts : {
+    for account in module.enterprise.enterprise_accounts_iam_response : {
       type       = "serviceid"
       iam_id     = account.iam_service_id
       identifier = replace(account.iam_service_id, "iam-", "")
@@ -91,7 +61,7 @@ module "create_trusted_profile_template" {
   account_ids_to_assign       = []
   policy_templates = [
     {
-      name        = "iam-admin-access"
+      name        = "${var.prefix}-iam-admin-access"
       description = "Grants Administrator role to all Identity and Access enabled services (IAM service group)."
       roles       = ["Administrator"]
       attributes = [{
@@ -103,38 +73,34 @@ module "create_trusted_profile_template" {
   ]
 }
 
-resource "time_sleep" "sleep_time" {
-  depends_on      = [module.create_trusted_profile_template]
-  create_duration = "60s"
-}
-
+# Temp workaround for : https://github.com/terraform-ibm-modules/terraform-ibm-trusted-profile/issues/192
 # Since the number of sub accounts created is not known during the planning phase therefore assignment has to be done separately
 resource "ibm_iam_trusted_profile_template_assignment" "account_assignment_for_new_accounts" {
-  depends_on = [time_sleep.sleep_time, module.enterprise]
-  count      = length(local.filtered_enterprise_accounts)
+  depends_on = [module.create_trusted_profile_template]
+  count      = length(module.enterprise.enterprise_accounts_iam_response)
 
   template_id      = module.create_trusted_profile_template.trusted_profile_template_id
   template_version = module.create_trusted_profile_template.trusted_profile_template_version
-  target           = local.filtered_enterprise_accounts[count.index].id
+  target           = module.enterprise.enterprise_accounts_iam_response[count.index].id
   target_type      = "Account"
 
   provisioner "local-exec" {
-    command = "echo Assigned template to Account: ${local.filtered_enterprise_accounts[count.index].id}"
+    command = "echo Assigned template to Account: ${module.enterprise.enterprise_accounts_iam_response[count.index].id}"
   }
 }
 
 ########################################################################################################################
-# IAM Policy Template and Access Group Template
+# IAM Policy Template, Access Group Template and Template Assignment
 ########################################################################################################################
 
 resource "ibm_iam_policy_template" "init_service_id_user_api_key_creator_policy_template" {
-  name        = "init-service-id-user-api-key-creator-policy"
+  name        = "${var.prefix}-init-service-id-user-api-key-creator-policy"
   description = "Policy template for service ID and user API key creation."
   committed   = true
 
   policy {
     type  = "access"
-    roles = ["Administrator", "Service ID creator", "User API key creator"]
+    roles = ["Viewer"]
     resource {
       attributes {
         key      = "serviceName"
@@ -145,91 +111,15 @@ resource "ibm_iam_policy_template" "init_service_id_user_api_key_creator_policy_
   }
 }
 
-resource "ibm_iam_policy_template" "init_all_services_policy_template" {
-  name        = "init-all-services-policy"
-  description = "Policy template for all services."
-  committed   = true
-
-  policy {
-    type  = "access"
-    roles = ["Administrator", "Manager"]
-    resource {
-      attributes {
-        key      = "serviceType"
-        value    = "service" # This explicitly refers to "All IAM-enabled services" (user-provisioned services)
-        operator = "stringEquals"
-      }
-    }
-  }
-}
-
-resource "ibm_iam_policy_template" "init_all_platform_services_policy_template" {
-  name        = "init-all-platform-services-policy"
-  description = "Policy template for all platform services."
-  committed   = true
-
-  policy {
-    type  = "access"
-    roles = ["Administrator"]
-    resource {
-      attributes {
-        key      = "serviceType"
-        value    = "platform_service"
-        operator = "stringEquals"
-      }
-    }
-  }
-}
-
-resource "ibm_iam_policy_template" "init_resource_group_policy_template" {
-  name        = "init-resource-group-policy"
-  description = "Policy template for resource groups."
-  committed   = true
-
-  policy {
-    type  = "access"
-    roles = ["Administrator"]
-    resource {
-      attributes {
-        key      = "resourceType"
-        value    = "resource-group"
-        operator = "stringEquals"
-      }
-    }
-  }
-}
-
-resource "ibm_iam_policy_template" "init_secrets_manager_policy_template" {
-  name        = "init-secrets-manager-policy"
-  description = "Policy template for Secrets Manager."
-  committed   = true
-
-  policy {
-    type  = "access"
-    roles = ["Viewer", "Writer", "Reader", "SecretsReader"]
-    resource {
-      attributes {
-        key      = "serviceName"
-        value    = "secrets-manager"
-        operator = "stringEquals"
-      }
-    }
-  }
-}
-
 resource "ibm_iam_access_group_template" "initial_access_group_template" {
   depends_on = [
-    ibm_iam_policy_template.init_service_id_user_api_key_creator_policy_template,
-    ibm_iam_policy_template.init_all_services_policy_template,
-    ibm_iam_policy_template.init_all_platform_services_policy_template,
-    ibm_iam_policy_template.init_resource_group_policy_template,
-    ibm_iam_policy_template.init_secrets_manager_policy_template
+    ibm_iam_policy_template.init_service_id_user_api_key_creator_policy_template
   ]
 
-  name        = "initial-access-group-template"
+  name        = "${var.prefix}-initial-access-group-template"
   description = "The access group template for sub accounts to assign access to new users being invited to the sub account"
   group {
-    name        = "new-user-access"
+    name        = "${var.prefix}-new-user-access"
     description = "The access group to be assigned to the new users being invited to the sub account"
     action_controls {
       access {
@@ -248,44 +138,56 @@ resource "ibm_iam_access_group_template" "initial_access_group_template" {
     id      = split("/", ibm_iam_policy_template.init_service_id_user_api_key_creator_policy_template.id)[0]
     version = ibm_iam_policy_template.init_service_id_user_api_key_creator_policy_template.version
   }
-  policy_template_references {
-    id      = split("/", ibm_iam_policy_template.init_all_services_policy_template.id)[0]
-    version = ibm_iam_policy_template.init_all_services_policy_template.version
-  }
-  policy_template_references {
-    id      = split("/", ibm_iam_policy_template.init_all_platform_services_policy_template.id)[0]
-    version = ibm_iam_policy_template.init_all_platform_services_policy_template.version
-  }
-  policy_template_references {
-    id      = split("/", ibm_iam_policy_template.init_resource_group_policy_template.id)[0]
-    version = ibm_iam_policy_template.init_resource_group_policy_template.version
-  }
-  policy_template_references {
-    id      = split("/", ibm_iam_policy_template.init_secrets_manager_policy_template.id)[0]
-    version = ibm_iam_policy_template.init_secrets_manager_policy_template.version
-  }
   committed = true
 }
 
+resource "ibm_iam_access_group_template_assignment" "iam_access_group_template_assignment_instance" {
+  depends_on = [
+    module.enterprise,
+    ibm_iam_access_group_template.initial_access_group_template
+  ]
+  for_each         = { for account in module.enterprise.enterprise_accounts_iam_response : account.name => account }
+  target           = each.value.id
+  target_type      = "Account"
+  template_id      = split("/", ibm_iam_access_group_template.initial_access_group_template.id)[0]
+  template_version = ibm_iam_access_group_template.initial_access_group_template.version
+}
+
 ########################################################################################################################
-# Assigning Access Group Template and Inviting Users to Sub Account
+# Inviting Users to Sub Account
 ########################################################################################################################
 
-module "invite_users" {
-  depends_on = [module.enterprise,
-    module.create_trusted_profile_template,
+module "invite_users_account_1" {
+  providers = {
+    ibm = ibm.account-1
+  }
+  depends_on = [
     ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts,
-  ibm_iam_access_group_template.initial_access_group_template]
-  source                        = "../../modules/account_invite"
-  for_each                      = { for account in local.filtered_enterprise_accounts : account.name => account }
-  account_id                    = each.value.id
-  users_to_invite               = local.sub_account_users_to_invite[each.key]
-  account_iam_apikey            = each.value.iam_apikey
-  account_service_id            = replace(each.value.iam_service_id, "iam-", "")
-  access_group_name             = ibm_iam_access_group_template.initial_access_group_template.group[0].name
-  access_group_template_id      = ibm_iam_access_group_template.initial_access_group_template.id
-  access_group_template_version = ibm_iam_access_group_template.initial_access_group_template.version
-  trusted_profile_name          = var.trusted_profile_name
+    ibm_iam_access_group_template_assignment.iam_access_group_template_assignment_instance
+  ]
+  source                      = "../../modules/account_invite"
+  users_to_invite             = var.sub_account_users_to_invite[trimprefix(module.enterprise.enterprise_accounts_iam_response[0].name, "${var.prefix}_")]
+  ibmcloud_api_key            = module.enterprise.enterprise_accounts_iam_response[0].iam_apikey
+  existing_account_service_id = replace(module.enterprise.enterprise_accounts_iam_response[0].iam_service_id, "iam-", "")
+  existing_access_group_name  = ibm_iam_access_group_template.initial_access_group_template.group[0].name
+  trusted_profile_name        = "${var.prefix}-enable-service-id-to-invite-users"
+}
+
+module "invite_users_account_2" {
+  providers = {
+    ibm = ibm.account-2
+  }
+  depends_on = [
+    module.invite_users_account_1,
+    ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts,
+    ibm_iam_access_group_template_assignment.iam_access_group_template_assignment_instance
+  ]
+  source                      = "../../modules/account_invite"
+  users_to_invite             = var.sub_account_users_to_invite[trimprefix(module.enterprise.enterprise_accounts_iam_response[1].name, "${var.prefix}_")]
+  ibmcloud_api_key            = module.enterprise.enterprise_accounts_iam_response[1].iam_apikey
+  existing_account_service_id = replace(module.enterprise.enterprise_accounts_iam_response[1].iam_service_id, "iam-", "")
+  existing_access_group_name  = ibm_iam_access_group_template.initial_access_group_template.group[0].name
+  trusted_profile_name        = "${var.prefix}-enable-service-id-to-invite-users"
 }
 
 ########################################################################################################################
