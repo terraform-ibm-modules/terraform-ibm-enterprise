@@ -82,7 +82,6 @@ func TestRunAdvancedExample(t *testing.T) {
 
 	options := setupAdvancedOptions(t, "enterprise-com", advancedExampleDir)
 
-	// now do full test single-threaded
 	output, err := options.RunTestConsistency()
 	assert.Nil(t, err, "This should not have errored")
 	assert.NotNil(t, output, "Expected some output")
