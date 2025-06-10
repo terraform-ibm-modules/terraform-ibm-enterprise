@@ -1,3 +1,4 @@
+# adding a data block to avoid pre-commit error of having IBM provider and not using it
 data "ibm_iam_access_group" "accgroup" {
   access_group_name = var.existing_access_group_name
 }
