@@ -13,7 +13,7 @@ resource "null_resource" "invite_user" {
   }
 
   provisioner "local-exec" {
-    command = "${path.module}/invite_user.sh"
+    command = "${path.module}/../scripts/invite_user.sh"
     environment = {
       API_KEY            = var.ibmcloud_api_key
       USER_EMAIL         = each.value.email
