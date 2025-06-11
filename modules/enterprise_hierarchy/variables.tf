@@ -5,6 +5,8 @@ variable "enterprise_hierarchy" {
     owner_iam_id           = optional(string, null)
     add_owner_iam_policies = optional(bool, false)
     key_name               = string
+    enterprise_iam_managed = optional(bool, true)
+    mfa                    = optional(string, "NONE")
   })))
   description = "tree based input for creating enterprise children"
 }

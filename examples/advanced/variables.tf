@@ -7,11 +7,11 @@ variable "ibmcloud_api_key" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
-  default     = "tf-ibm"
+  default     = "tf-ibm-enterprise"
 }
 
-variable "enterprise_name" {
-  description = "Name of the enterprise account"
+variable "enterprise_account_name" {
+  description = "Name of the parent enterprise account"
   type        = string
 }
 
@@ -37,4 +37,9 @@ variable "resource_group" {
   type        = string
   description = "Name of the resource group to use for this example. If not set, a resource group is created."
   default     = null
+}
+
+variable "owner_iam_id" {
+  description = "The IAM ID of the user to be assigned as the owner for the sub account"
+  type        = string
 }
