@@ -1,17 +1,25 @@
-# adding a data block to avoid pre-commit error of having IBM provider and not using it
-data "ibm_iam_access_group" "accgroup" {
-  access_group_name = var.existing_access_group_name
+data "ibm_iam_trusted_profiles" "iam_trusted_profiles" {
+  account_id = var.existing_account_id
+  name       = var.existing_trusted_profile_name
 }
 
 resource "null_resource" "invite_user" {
+  for_each = { for idx, user_obj in var.users_to_invite : idx => user_obj }
+
+  triggers = {
+    user_email_trigger           = each.value.email
+    user_access_groups_trigger   = join(",", each.value.exisiting_access_groups)
+    trusted_profile_name_trigger = var.existing_trusted_profile_name
+  }
+
   provisioner "local-exec" {
     command = "${path.module}/invite_user.sh"
     environment = {
-      API_KEY              = var.ibmcloud_api_key
-      CREW_INIT_GROUP      = data.ibm_iam_access_group.accgroup.groups[0].name
-      USER_EMAILS          = join(" ", var.users_to_invite)
-      SERVICE_ID           = var.existing_account_service_id
-      TRUSTED_PROFILE_NAME = var.trusted_profile_name
+      API_KEY            = var.ibmcloud_api_key
+      USER_EMAIL         = each.value.email
+      USER_ACCESS_GROUPS = join(",", each.value.exisiting_access_groups) # Join access groups with a comma
+      SERVICE_ID         = var.existing_account_service_id
+      TRUSTED_PROFILE_ID = data.ibm_iam_trusted_profiles.iam_trusted_profiles.profiles[0].id
     }
   }
 }

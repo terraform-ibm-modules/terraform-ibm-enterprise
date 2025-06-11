@@ -11,7 +11,7 @@ variable "prefix" {
 }
 
 variable "enterprise_account_name" {
-  description = "Name of the enterprise account"
+  description = "Name of the parent enterprise account"
   type        = string
 }
 
@@ -38,12 +38,6 @@ variable "resource_group" {
   description = "Name of the resource group to use for this example. If not set, a resource group is created."
   default     = null
 }
-
-variable "sub_account_users_to_invite" {
-  description = "A map defining sub-account names and the list of users to invite to each."
-  type        = map(list(string))
-}
-
 
 variable "owner_iam_id" {
   description = "The IAM ID of the user to be assigned as the owner for the sub account"

@@ -1,25 +1,29 @@
-variable "existing_access_group_name" {
-  type        = string
-  description = "The access group name for initial access group for new users"
-}
-
-variable "users_to_invite" {
-  type        = list(string)
-  description = "The list of user email IDs to be invited to the sub account of the enterprise."
-}
-
 variable "ibmcloud_api_key" {
   type        = string
   sensitive   = true
-  description = "The sub account api key of the enterprise."
+  description = " The apikey used to authenticate to the account in the enterprise where users are to be invited."
 }
 
 variable "existing_account_service_id" {
   type        = string
-  description = "The sub account service ID."
+  description = "The service ID of the account which is used to assume the trusted profile with permission (All Identity and Access enabled services) to invite users."
 }
 
-variable "trusted_profile_name" {
+variable "existing_trusted_profile_name" {
   type        = string
-  description = "The trusted profile to be assumed by the sub account."
+  description = "The trusted profile used to send invite to the users. It needs Administrator access on All Identity and Access enabled services."
+}
+
+variable "existing_account_id" {
+  type        = string
+  description = "The ID of the account where the trusted profile for inviting users is created and the users will be invited."
+}
+
+variable "users_to_invite" {
+  description = "A list containing the email ID of user to be invited to an enterprise account and the list of access groups that needs to be assigned to the user"
+  type = list(object({
+    email                   = string
+    exisiting_access_groups = list(string)
+  }))
+  default = [] # Allow for an empty list
 }

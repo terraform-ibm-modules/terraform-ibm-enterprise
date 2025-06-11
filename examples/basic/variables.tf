@@ -11,7 +11,7 @@ variable "prefix" {
 }
 
 variable "enterprise_account_name" {
-  description = "Name of the enterprise account"
+  description = "Name of the parent enterprise account"
   type        = string
 }
 

@@ -12,7 +12,8 @@ resource "ibm_enterprise_account" "enterprise_account" {
   name         = each.value.name
   owner_iam_id = each.value.owner_iam_id == null ? var.enterprise_primary_contact_iam_id : each.value.owner_iam_id
   traits {
-    enterprise_iam_managed = true
+    enterprise_iam_managed = each.value.enterprise_iam_managed
+    mfa                    = each.value.mfa
   }
   options {
     create_iam_service_id_with_apikey_and_owner_policies = each.value.add_owner_iam_policies

@@ -47,14 +47,19 @@ module "create_trusted_profile_template" {
   source               = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
   version              = "3.1.0"
   template_name        = "${var.prefix}-enable-service-id-to-invite-users-template"
-  template_description = "Trusted Profile template for Enterpise with required access for inviting users"
+  template_description = "Trusted Profile template for Enterprise with required access for inviting users"
   profile_name         = "${var.prefix}-enable-service-id-to-invite-users"
-  profile_description  = "Trusted Profile for Enterpise sub accounts with required access for inviting users"
+  profile_description  = "Trusted Profile for Enterprise sub accounts with required access for inviting users"
   identities = [
-    for account in module.enterprise.enterprise_accounts_iam_response : {
+    {
       type       = "serviceid"
-      iam_id     = account.iam_service_id
-      identifier = replace(account.iam_service_id, "iam-", "")
+      iam_id     = module.enterprise.enterprise_accounts_iam_response[0].iam_service_id
+      identifier = replace(module.enterprise.enterprise_accounts_iam_response[0].iam_service_id, "iam-", "")
+    },
+    {
+      type       = "serviceid"
+      iam_id     = module.enterprise.enterprise_accounts_iam_response[1].iam_service_id
+      identifier = replace(module.enterprise.enterprise_accounts_iam_response[1].iam_service_id, "iam-", "")
     }
   ]
   account_group_ids_to_assign = []
@@ -165,12 +170,17 @@ module "invite_users_account_1" {
     ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts,
     ibm_iam_access_group_template_assignment.iam_access_group_template_assignment_instance
   ]
-  source                      = "../../modules/account_invite"
-  users_to_invite             = var.sub_account_users_to_invite[trimprefix(module.enterprise.enterprise_accounts_iam_response[0].name, "${var.prefix}_")]
-  ibmcloud_api_key            = module.enterprise.enterprise_accounts_iam_response[0].iam_apikey
-  existing_account_service_id = replace(module.enterprise.enterprise_accounts_iam_response[0].iam_service_id, "iam-", "")
-  existing_access_group_name  = ibm_iam_access_group_template.initial_access_group_template.group[0].name
-  trusted_profile_name        = "${var.prefix}-enable-service-id-to-invite-users"
+  source                        = "../../modules/account_invite"
+  ibmcloud_api_key              = module.enterprise.enterprise_accounts_iam_response[0].iam_apikey
+  existing_account_id           = module.enterprise.enterprise_accounts_iam_response[0].id
+  existing_account_service_id   = replace(module.enterprise.enterprise_accounts_iam_response[0].iam_service_id, "iam-", "")
+  existing_trusted_profile_name = "${var.prefix}-enable-service-id-to-invite-users"
+  users_to_invite = [
+    {
+      email                   = "goldeneye.operations@ibm.com"
+      exisiting_access_groups = [ibm_iam_access_group_template.initial_access_group_template.group[0].name]
+    }
+  ]
 }
 
 module "invite_users_account_2" {
@@ -182,12 +192,17 @@ module "invite_users_account_2" {
     ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts,
     ibm_iam_access_group_template_assignment.iam_access_group_template_assignment_instance
   ]
-  source                      = "../../modules/account_invite"
-  users_to_invite             = var.sub_account_users_to_invite[trimprefix(module.enterprise.enterprise_accounts_iam_response[1].name, "${var.prefix}_")]
-  ibmcloud_api_key            = module.enterprise.enterprise_accounts_iam_response[1].iam_apikey
-  existing_account_service_id = replace(module.enterprise.enterprise_accounts_iam_response[1].iam_service_id, "iam-", "")
-  existing_access_group_name  = ibm_iam_access_group_template.initial_access_group_template.group[0].name
-  trusted_profile_name        = "${var.prefix}-enable-service-id-to-invite-users"
+  source                        = "../../modules/account_invite"
+  ibmcloud_api_key              = module.enterprise.enterprise_accounts_iam_response[1].iam_apikey
+  existing_account_id           = module.enterprise.enterprise_accounts_iam_response[1].id
+  existing_account_service_id   = replace(module.enterprise.enterprise_accounts_iam_response[1].iam_service_id, "iam-", "")
+  existing_trusted_profile_name = "${var.prefix}-enable-service-id-to-invite-users"
+  users_to_invite = [
+    {
+      email                   = "goldeneye.operations@ibm.com"
+      exisiting_access_groups = [ibm_iam_access_group_template.initial_access_group_template.group[0].name]
+    }
+  ]
 }
 
 ########################################################################################################################
