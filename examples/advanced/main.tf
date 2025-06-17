@@ -177,7 +177,7 @@ module "invite_users_account_1" {
   existing_trusted_profile_name = "${var.prefix}-enable-service-id-to-invite-users"
   users_to_invite = [
     {
-      email                   = "goldeneye.operations@ibm.com"
+      email                   = "goldeneye.development@ibm.com"
       exisiting_access_groups = [ibm_iam_access_group_template.initial_access_group_template.group[0].name]
     }
   ]
@@ -199,7 +199,7 @@ module "invite_users_account_2" {
   existing_trusted_profile_name = "${var.prefix}-enable-service-id-to-invite-users"
   users_to_invite = [
     {
-      email                   = "goldeneye.operations@ibm.com"
+      email                   = "goldeneye.development@ibm.com"
       exisiting_access_groups = [ibm_iam_access_group_template.initial_access_group_template.group[0].name]
     }
   ]
