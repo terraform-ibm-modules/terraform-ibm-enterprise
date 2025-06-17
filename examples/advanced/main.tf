@@ -1,4 +1,4 @@
-# Lookup data from given enterprise account
+# Lookup data from given enterprise account name
 data "ibm_enterprise_accounts" "enterprise_accounts" {
   name = var.enterprise_account_name
 }
