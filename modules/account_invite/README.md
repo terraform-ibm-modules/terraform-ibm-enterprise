@@ -12,7 +12,7 @@ Features :
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.65.0, < 2.0.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.79.2, < 2.0.0 |
 | <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.2.1, <4.0.0 |
 
 ### Modules
