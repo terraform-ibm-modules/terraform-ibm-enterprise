@@ -14,6 +14,10 @@ This is a collection of sub modules and which will take tree based enterprise in
 <!-- BEGIN OVERVIEW HOOK -->
 ## Overview
 * [terraform-ibm-enterprise](#terraform-ibm-enterprise)
+* [Submodules](./modules)
+    * [account_invite](./modules/account_invite)
+    * [dynamic_values](./modules/dynamic_values)
+    * [enterprise_hierarchy](./modules/enterprise_hierarchy)
 * [Examples](./examples)
     * [Advanced example](./examples/advanced)
     * [Basic example](./examples/basic)
@@ -75,17 +79,17 @@ module "enterprise" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.65.0, < 2.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
+| <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.79.2, < 2.0.0 |
 
 ### Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_dynamic_values"></a> [dynamic\_values](#module\_dynamic\_values) | ./submodules/dynamic_values | n/a |
-| <a name="module_enterprise_hierarchy_depth_0"></a> [enterprise\_hierarchy\_depth\_0](#module\_enterprise\_hierarchy\_depth\_0) | ./submodules/enterprise_hierarchy | n/a |
-| <a name="module_enterprise_hierarchy_depth_1"></a> [enterprise\_hierarchy\_depth\_1](#module\_enterprise\_hierarchy\_depth\_1) | ./submodules/enterprise_hierarchy | n/a |
-| <a name="module_enterprise_hierarchy_depth_2"></a> [enterprise\_hierarchy\_depth\_2](#module\_enterprise\_hierarchy\_depth\_2) | ./submodules/enterprise_hierarchy | n/a |
+| <a name="module_dynamic_values"></a> [dynamic\_values](#module\_dynamic\_values) | ./modules/dynamic_values | n/a |
+| <a name="module_enterprise_hierarchy_depth_0"></a> [enterprise\_hierarchy\_depth\_0](#module\_enterprise\_hierarchy\_depth\_0) | ./modules/enterprise_hierarchy | n/a |
+| <a name="module_enterprise_hierarchy_depth_1"></a> [enterprise\_hierarchy\_depth\_1](#module\_enterprise\_hierarchy\_depth\_1) | ./modules/enterprise_hierarchy | n/a |
+| <a name="module_enterprise_hierarchy_depth_2"></a> [enterprise\_hierarchy\_depth\_2](#module\_enterprise\_hierarchy\_depth\_2) | ./modules/enterprise_hierarchy | n/a |
 
 ### Resources
 

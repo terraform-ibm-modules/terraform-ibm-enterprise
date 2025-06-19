@@ -8,4 +8,5 @@ CRA_TARGETS:
     SCC_REGION: "us-south" # The IBM Cloud region that the SCC instance is in. If not provided, a default global value will be used.
     TOOLCHAIN_ID: "db7747b2-4542-4d57-be8d-a9520a42eb29" # The ID of the toolchain to get the profile from. Must be from an account in which the apikey has access to.
     CRA_ENVIRONMENT_VARIABLES:  # An optional map of environment variables for CRA, where the key is the variable name and value is the value. Useful for providing TF_VARs.
-      TF_VAR_enterprise_name: "DAF Enterprise"
+      TF_VAR_enterprise_account_name: "DAF Enterprise"
+      TF_VAR_owner_iam_id: "IBMid-664002EWSV"

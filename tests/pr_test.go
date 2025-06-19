@@ -37,8 +37,9 @@ func setupOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptio
 	})
 
 	options.TerraformVars = map[string]interface{}{
-		"prefix":          options.Prefix,
-		"enterprise_name": "DAF Enterprise",
+		"prefix":                  options.Prefix,
+		"enterprise_account_name": "DAF Enterprise",
+		"owner_iam_id":            "IBMid-664002EWSV", // iam_id for GoldenEye Operations
 	}
 
 	return options
@@ -53,7 +54,8 @@ func setupAdvancedOptions(t *testing.T, prefix string, dir string) *testhelper.T
 
 	options.TerraformVars = map[string]interface{}{
 		"prefix":                      options.Prefix,
-		"enterprise_name":             "DAF Enterprise",
+		"enterprise_account_name":     "DAF Enterprise",
+		"owner_iam_id":                "IBMid-664002EWSV", // iam_id for GoldenEye Operations
 		"existing_sm_instance_guid":   permanentResources["secretsManagerGuid"],
 		"existing_sm_instance_region": permanentResources["secretsManagerRegion"],
 	}

@@ -49,6 +49,7 @@ output "enterprise_accounts_iam_response" {
   description = "List of accounts created in an Enterprise"
   sensitive   = true
   value = flatten([[for key, value in module.enterprise_hierarchy_depth_0.accounts : {
+    id : value.id,
     parent : value.parent,
     name : value.name,
     crn : value.crn,
@@ -58,6 +59,7 @@ output "enterprise_accounts_iam_response" {
     iam_apikey_id : value.iam_apikey_id
     }],
     [for key, value in module.enterprise_hierarchy_depth_1.accounts : {
+      id : value.id,
       parent : value.parent,
       name : value.name,
       crn : value.crn,
@@ -67,6 +69,7 @@ output "enterprise_accounts_iam_response" {
       iam_apikey_id : value.iam_apikey_id
     }],
     [for key, value in module.enterprise_hierarchy_depth_2.accounts : {
+      id : value.id,
       parent : value.parent,
       name : value.name,
       crn : value.crn,
