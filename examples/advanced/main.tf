@@ -45,7 +45,7 @@ module "enterprise" {
 
 module "create_trusted_profile_template" {
   source               = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
-  version              = "3.1.0"
+  version              = "3.1.1"
   template_name        = "${var.prefix}-enable-service-id-to-invite-users-template"
   template_description = "Trusted Profile template for Enterprise with required access for inviting users"
   profile_name         = "${var.prefix}-enable-service-id-to-invite-users"
@@ -221,7 +221,7 @@ locals {
 
 module "resource_group" {
   source  = "terraform-ibm-modules/resource-group/ibm"
-  version = "1.1.6"
+  version = "1.2.1"
   # if an existing resource group is not set (null) create a new one using prefix
   resource_group_name          = var.resource_group == null ? "${var.prefix}-resource-group" : null
   existing_resource_group_name = var.resource_group
@@ -234,7 +234,7 @@ module "resource_group" {
 #Create a new SM instance if not using an existing one
 module "secrets_manager" {
   source               = "terraform-ibm-modules/secrets-manager/ibm"
-  version              = "1.19.6"
+  version              = "1.26.4"
   count                = var.existing_sm_instance_guid == null ? 1 : 0
   resource_group_id    = module.resource_group.resource_group_id
   region               = local.sm_region
@@ -246,7 +246,7 @@ module "secrets_manager" {
 # Create a secret group to place the certificate in
 module "secrets_manager_group" {
   source                   = "terraform-ibm-modules/secrets-manager-secret-group/ibm"
-  version                  = "1.2.2"
+  version                  = "1.3.8"
   region                   = local.sm_region
   secrets_manager_guid     = local.sm_guid
   secret_group_name        = "${var.prefix}-certs"
@@ -258,7 +258,7 @@ module "secrets_manager_group" {
 
 module "secrets_manager_arbitrary_secret" {
   source                  = "terraform-ibm-modules/secrets-manager-secret/ibm"
-  version                 = "1.4.0"
+  version                 = "1.7.0"
   region                  = local.sm_region
   secrets_manager_guid    = local.sm_guid
   secret_group_id         = module.secrets_manager_group.secret_group_id
