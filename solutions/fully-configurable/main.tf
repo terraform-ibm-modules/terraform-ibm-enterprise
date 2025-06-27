@@ -1,16 +1,16 @@
 locals {
   prefix = var.prefix != null ? (trimspace(var.prefix) != "" ? "${trimspace(var.prefix)}-" : "") : ""
 
-  prefixed_enterprise_account_groups = [
-    for account_group in var.enterprise_account_groups : (
+  prefixed_enterprise_account_group = [
+    for account_group in var.enterprise_account_group : (
       merge(account_group, {
         name = "${local.prefix}${account_group.name}"
       })
     )
   ]
 
-  prefixed_enterprise_accounts = [
-    for account in var.enterprise_accounts : (
+  prefixed_enterprise_account = [
+    for account in var.enterprise_account : (
       merge(account, {
         name = "${local.prefix}${account.name}"
       })
@@ -34,11 +34,11 @@ locals {
 ########################################################################################################################
 
 module "enterprise" {
-  source                                      = "../.."
-  enterprise_crn                              = var.parent_enterprise_account_crn
-  enterprise_primary_contact_iam_id           = var.parent_enterprise_account_primary_contact_iam_id
-  enterprise_account_groups                   = local.prefixed_enterprise_account_groups
-  enterprise_accounts                         = local.prefixed_enterprise_accounts
+  source                            = "../.."
+  enterprise_crn                    = var.parent_enterprise_account_crn
+  enterprise_primary_contact_iam_id = var.parent_enterprise_account_primary_contact_iam_id
+  enterprise_account_groups         = local.prefixed_enterprise_account_group
+  enterprise_accounts               = local.prefixed_enterprise_account
 }
 
 ########################################################################################################################

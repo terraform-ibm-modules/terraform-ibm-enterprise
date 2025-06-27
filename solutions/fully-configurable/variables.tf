@@ -1,5 +1,5 @@
 ########################################################################################################################
-# Common variables
+# common variables
 ########################################################################################################################
 
 variable "ibmcloud_api_key" {
@@ -18,13 +18,6 @@ variable "provider_visibility" {
     condition     = contains(["public", "private", "public-and-private"], var.provider_visibility)
     error_message = "Invalid value for 'provider_visibility'. Allowed values are 'public', 'private', or 'public-and-private'."
   }
-}
-
-variable "existing_resource_group_name" {
-  type        = string
-  description = "The name of an existing resource group to provision resource in."
-  default     = "Default"
-  nullable    = false
 }
 
 variable "prefix" {
@@ -56,7 +49,7 @@ variable "region" {
 }
 
 ########################################################################################################################
-# Enterprise variables
+# enterprise variables
 ########################################################################################################################
 
 variable "parent_enterprise_account_crn" {
@@ -68,26 +61,26 @@ variable "parent_enterprise_account_crn" {
 variable "parent_enterprise_account_primary_contact_iam_id" {
   type        = string
   description = "The IAM id of the parent Enterprise account owner."
-  default     = ""
+  nullable    = false
 }
 
-variable "enterprise_account_groups" {
+variable "enterprise_account_group" {
   type = list(object({
     key_name        = string
     name            = string
     parent_key_name = optional(string, null)
     owner_iam_id    = optional(string, null)
   }))
-  description = "The list of account groups to be created under the parent enterprise account."
+  description = "The list of account groups to be created under the parent enterprise account. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-account_and_account_group.md)."
   default     = []
 
   validation {
-    condition     = length(var.enterprise_account_groups) == 0 || length(var.enterprise_account_groups) == 1
-    error_message = "The 'enterprise_account_groups' list cannot be greater than 1. Received ${length(var.enterprise_account_groups)} elements."
+    condition     = length(var.enterprise_account_group) == 0 || length(var.enterprise_account_group) == 1
+    error_message = "The 'enterprise_account_group' list cannot be greater than 1. Received ${length(var.enterprise_account_group)} elements."
   }
 }
 
-variable "enterprise_accounts" {
+variable "enterprise_account" {
   type = list(object({
     key_name               = string
     name                   = string
@@ -97,17 +90,17 @@ variable "enterprise_accounts" {
     enterprise_iam_managed = optional(bool, true)
     mfa                    = optional(string, "NONE")
   }))
-  description = "The list of accounts to be created under the parent enterprise account."
+  description = "The list of accounts to be created under the parent enterprise account. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-account_and_account_group.md)."
   default     = []
 
   validation {
-    condition     = length(var.enterprise_accounts) == 0 || length(var.enterprise_accounts) == 1
-    error_message = "The 'enterprise_accounts' list cannot be greater than 1. Received ${length(var.enterprise_accounts)} elements."
+    condition     = length(var.enterprise_account) == 0 || length(var.enterprise_account) == 1
+    error_message = "The 'enterprise_account' list cannot be greater than 1. Received ${length(var.enterprise_account)} elements."
   }
 }
 
 ##############################################################################
-# trusted profile and access group policy
+# trusted profile and access group policy variables
 ##############################################################################
 
 variable "trusted_profile_name" {
@@ -122,66 +115,12 @@ variable "trusted_profile_description" {
   default     = "Trusted Profile for sub accounts with required access for inviting users"
 }
 
-# variable "access_group_name" {
-#   description = "The name of the access group that will be reflected in the sub account after being assigned from the parent enterprise."
-#   type = string
-#   default = "new-user-access"
-# }
-
-# variable "access_group_policies" {
-#   description = "list of policies"
-#   type = map(object({
-#     roles              = list(string)
-#     account_management = optional(bool)
-#     tags               = set(string)
-#     resources = optional(list(object({
-#       region               = optional(string)
-#       attributes           = optional(map(string))
-#       service              = optional(string)
-#       resource_instance_id = optional(string)
-#       resource_type        = optional(string)
-#       resource             = optional(string)
-#       resource_group_id    = optional(string)
-#     })))
-#     resource_attributes = optional(list(object({
-#       name     = string
-#       value    = string
-#       operator = optional(string)
-#     })))
-#   }))
-#   default = {
-#     "test-viewer" = {
-#       roles = ["Viewer"]
-#       tags = ["goldeneye", "viewer access"]
-#       resource_attributes = [{
-#           name      = "serviceName"
-#           value     = "iam-identity"
-#           operator  = "stringEquals"
-#       }]
-#     }
-#   }
-# }
-
-# variable "dynamic_rules" {
-#   description = "list of dynamic rules"
-#   type = map(object({
-#     expiration        = number
-#     identity_provider = string
-#     conditions = list(object({
-#       claim    = string
-#       operator = string
-#       value    = string
-#     }))
-#   }))
-#   default = {}
-# }
-
 variable "access_groups" {
-  description = "Map of access group configurations to create multiple access groups."
+  description = "Map of access group configurations to create multiple access groups for the newly invited users. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-access_groups.md)."
   type = map(object({
     access_group_name = string
-    add_members = optional(bool, false)
-    dynamic_rules     = optional(map(object({
+    add_members       = optional(bool, false)
+    dynamic_rules = optional(map(object({
       expiration        = number
       identity_provider = string
       conditions = list(object({
@@ -189,7 +128,7 @@ variable "access_groups" {
         operator = string
         value    = string
       }))
-    })), {}) # Default to an empty map if not provided
+    })), {})
     policies = optional(map(object({
       roles              = list(string)
       account_management = optional(bool)
@@ -208,20 +147,20 @@ variable "access_groups" {
         value    = string
         operator = optional(string)
       })))
-    })), {}) # Default to an empty map if not provided
+    })), {})
   }))
   default = {}
 }
 
 ########################################################################################################################
-# Account Invite variables
+# account invite variables
 ########################################################################################################################
 
 variable "users_to_invite" {
-  description = "A list containing the email ID of user to be invited to an enterprise account and the list of access groups that needs to be assigned to the user"
+  description = "A list containing the email ID of user to be invited to an enterprise account and the list of access groups that needs to be assigned to the user. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-users_to_invite.md)."
   type = list(object({
     email                   = string
-    exisiting_access_groups = list(string)
+    exisiting_access_groups = optional(list(string), [])
   }))
   default = [] # Allow for an empty list
 }

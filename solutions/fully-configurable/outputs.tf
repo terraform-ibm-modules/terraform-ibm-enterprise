@@ -1,16 +1,14 @@
-output "api_key" {
-    value = module.enterprise.enterprise_accounts_iam_response[0].iam_apikey
-    sensitive = true
+output "enterprise_account_groups" {
+  description = "List of account groups created in an Enterprise"
+  value       = module.enterprise.enterprise_account_groups
 }
 
-output "prefixed_account_group" {
-  value = local.prefixed_enterprise_account_groups
+output "enterprise_accounts" {
+  description = "List of accounts created in an Enterprise"
+  value       = module.enterprise.enterprise_accounts
 }
 
-output "prefixed_account" {
-  value = local.prefixed_enterprise_accounts
-}
-
-output "prefixed_invite" {
-  value = local.prefixed_users_to_invite
+output "enterprise_accounts_iam_response" {
+  description = "List of accounts with IAM details created in an Enterprise"
+  value       = module.enterprise.enterprise_accounts_iam_response
 }
