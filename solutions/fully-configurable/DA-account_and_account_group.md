@@ -55,7 +55,7 @@ The `enterprise_account` input variable allows you to define individual accounts
     name                   = "account_9"
     parent_key_name        = "group-key-1"
     add_owner_iam_policies = true
-    owner_iam_id           = "IBMid-692000SGND"
+    owner_iam_id           = "IBMid-142000RFBD"
   }
 ]
 ```

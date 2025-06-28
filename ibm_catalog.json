@@ -23,7 +23,7 @@
       "short_description": "Creates an IBM enterprise account and invite users to the account.",
       "long_description": "This deployable architecture automates the creation of an IBM enterprise account under a parent IBM enterprise and invite users to the new account. Optionally it also creates an account group in order to organize and manage accounts hierarchically and provisions creation of multiple access groups to be assigned to the newly invited users. For more details on IBM enterprise, [see here](https://cloud.ibm.com/docs/enterprise-management?topic=enterprise-management-what-is-enterprise).",
       "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/blob/main/solutions/fully-configurable/README.md",
-      "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-enterprise/refs/heads/13539-enterprise-DA/images/enterprise.svg",
+      "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-enterprise/main/images/enterprise.svg",
       "provider_name": "IBM",
       "features": [
         {
@@ -171,7 +171,7 @@
               {
                 "diagram": {
                   "caption": "IBM Enterprise architecture",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-enterprise/refs/heads/13539-enterprise-DA/reference-architecture/enterprise.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-enterprise/main/reference-architecture/enterprise.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "**IBM Cloud Enterprise** <br/> <br/> <b>Description</b> <br/>This deployable architecture automates the structured setup and management of IBM Cloud Enterprise accounts and user access. It streamlines the creation of new accounts and account groups within an enterprise, enabling centralized governance. <br/> <br/> <b>Inviting Users and Access Group</b> </br>This solution simplifies user onboarding by automating the invitation process and assigning users to pre-configured access groups, ensuring they have the correct permissions from the start. A trusted profile is established to securely facilitate these user invitations and manage IAM operations within the newly provisioned accounts."

@@ -13,11 +13,11 @@ Each entry in the access_groups map is an object with the following properties:
 - `access_group_name` (required): The name of the access group to be created.
 - `add_members` (optional): (Boolean) Specifies whether members should be added to this access group. Defaults to `false` as the members will be added to each during invitation based on `users_to_invite` variable.
  - `dynamic_rules` (optional): (Map) Configuration for dynamic membership rules based on identity provider attributes. Each key in this map can be a unique identifier for a dynamic rule.
-   
+
    Options for dynamic_rules object:
    - `expiration` (required): The duration that a user is a member of the group before the access group membership is re-evaluated.
    - `identity_provider` (required): The identity provider that the rule applies to.
-   - `conditions` (required): (List) A list of conditions that must be met for a user to be dynamically added to the group.   
+   - `conditions` (required): (List) A list of conditions that must be met for a user to be dynamically added to the group.
 
      Options for conditions object:
      - `claim` (required): The name of the claim from the identity provider.

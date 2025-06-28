@@ -80,8 +80,13 @@ module "create_trusted_profile_template" {
 
 # Temp workaround for : https://github.com/terraform-ibm-modules/terraform-ibm-trusted-profile/issues/192
 # Since the number of sub accounts created is not known during the planning phase therefore assignment has to be done separately
+resource "time_sleep" "sleep_time" {
+  depends_on      = [module.create_trusted_profile_template]
+  create_duration = "60s"
+}
+
 resource "ibm_iam_trusted_profile_template_assignment" "account_assignment_for_new_accounts" {
-  depends_on = [module.create_trusted_profile_template]
+  depends_on = [time_sleep.sleep_time]
   count      = length(module.enterprise.enterprise_accounts_iam_response)
 
   template_id      = module.create_trusted_profile_template.trusted_profile_template_id

@@ -65,7 +65,6 @@ func setupAdvancedOptions(t *testing.T, prefix string, dir string) *testhelper.T
 
 func TestRunAdvancedExample(t *testing.T) {
 	t.Parallel()
-	t.Skip()
 
 	options := setupAdvancedOptions(t, "enterprise-com", advancedExampleDir)
 
