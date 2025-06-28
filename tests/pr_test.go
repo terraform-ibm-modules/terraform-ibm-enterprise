@@ -89,7 +89,7 @@ func TestFullyConfigurable(t *testing.T) {
 		{
 			"key_name":     "group-key",
 			"name":         "test_account_group",
-			"owner_iam_id": "IBMid-692000SGND",
+			"owner_iam_id": "IBMid-664002EWSV",
 		},
 	}
 	enterpriseAccount := []map[string]any{
@@ -97,7 +97,7 @@ func TestFullyConfigurable(t *testing.T) {
 			"key_name":               "acc-key",
 			"name":                   "test_account",
 			"add_owner_iam_policies": true, //this field enable child account to have IAM_APIKey with owner IAM policies
-			"owner_iam_id":           "IBMid-692000SGND",
+			"owner_iam_id":           "IBMid-664002EWSV",
 		},
 	}
 	accessGroups := map[string]any{
@@ -185,7 +185,7 @@ func TestUpgradeFullyConfigurable(t *testing.T) {
 		{
 			"key_name":     "group-key",
 			"name":         "test_account_group",
-			"owner_iam_id": "IBMid-692000SGND",
+			"owner_iam_id": "IBMid-664002EWSV",
 		},
 	}
 	enterpriseAccount := []map[string]any{
@@ -193,7 +193,7 @@ func TestUpgradeFullyConfigurable(t *testing.T) {
 			"key_name":               "acc-key",
 			"name":                   "test_account",
 			"add_owner_iam_policies": true, //this field enable child account to have IAM_APIKey with owner IAM policies
-			"owner_iam_id":           "IBMid-692000SGND",
+			"owner_iam_id":           "IBMid-664002EWSV",
 		},
 	}
 	accessGroups := map[string]any{
