@@ -43,6 +43,21 @@ module "enterprise" {
 # Trusted Profile Template and Template Assignment
 ########################################################################################################################
 
+locals {
+  enterprise_accounts_by_iam_id = {
+    for account in module.enterprise.enterprise_accounts_iam_response :
+    account.iam_service_id => account
+  }
+
+  sorted_iam_service_ids = sort(keys(local.enterprise_accounts_by_iam_id))
+
+  # sorting the enterprise accounts in order so that the identities order do not change in trusted policy template
+  sorted_enterprise_accounts_data = [
+    for id in local.sorted_iam_service_ids :
+    local.enterprise_accounts_by_iam_id[id]
+  ]
+}
+
 module "create_trusted_profile_template" {
   source               = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
   version              = "3.1.0"
@@ -51,15 +66,10 @@ module "create_trusted_profile_template" {
   profile_name         = "${var.prefix}-enable-service-id-to-invite-users"
   profile_description  = "Trusted Profile for Enterprise sub accounts with required access for inviting users"
   identities = [
-    {
+    for account in local.sorted_enterprise_accounts_data : {
       type       = "serviceid"
-      iam_id     = module.enterprise.enterprise_accounts_iam_response[0].iam_service_id
-      identifier = replace(module.enterprise.enterprise_accounts_iam_response[0].iam_service_id, "iam-", "")
-    },
-    {
-      type       = "serviceid"
-      iam_id     = module.enterprise.enterprise_accounts_iam_response[1].iam_service_id
-      identifier = replace(module.enterprise.enterprise_accounts_iam_response[1].iam_service_id, "iam-", "")
+      iam_id     = account.iam_service_id
+      identifier = replace(account.iam_service_id, "iam-", "")
     }
   ]
   account_group_ids_to_assign = []
@@ -80,6 +90,7 @@ module "create_trusted_profile_template" {
 
 # Temp workaround for : https://github.com/terraform-ibm-modules/terraform-ibm-trusted-profile/issues/192
 # Since the number of sub accounts created is not known during the planning phase therefore assignment has to be done separately
+# and sometimes throws out error that the template cannot be assigned as it is in locked state.
 resource "time_sleep" "sleep_time" {
   depends_on      = [module.create_trusted_profile_template]
   create_duration = "60s"
