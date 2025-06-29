@@ -15,7 +15,7 @@ variable "enterprise_primary_contact_iam_id" {
 
 variable "enterprise_accounts" {
   description = "List of enterprise child accounts in the enterprise"
-  type        = list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null), add_owner_iam_policies = optional(bool, false) }))
+  type        = list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null), add_owner_iam_policies = optional(bool, false), enterprise_iam_managed = optional(bool, true), mfa = optional(string, "NONE") }))
   default     = []
   validation {
     error_message = "Accounts key_name should be unique"

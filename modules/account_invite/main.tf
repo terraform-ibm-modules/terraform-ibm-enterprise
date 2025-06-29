@@ -1,4 +1,5 @@
 data "ibm_iam_trusted_profiles" "iam_trusted_profiles" {
+  count      = length(var.users_to_invite) > 0 ? 1 : 0
   account_id = var.existing_account_id
   name       = var.existing_trusted_profile_name
 }
@@ -19,7 +20,7 @@ resource "null_resource" "invite_user" {
       USER_EMAIL         = each.value.email
       USER_ACCESS_GROUPS = join(",", each.value.exisiting_access_groups) # Join access groups with a comma
       SERVICE_ID         = var.existing_account_service_id
-      TRUSTED_PROFILE_ID = data.ibm_iam_trusted_profiles.iam_trusted_profiles.profiles[0].id
+      TRUSTED_PROFILE_ID = data.ibm_iam_trusted_profiles.iam_trusted_profiles[0].profiles[0].id
     }
   }
 }
