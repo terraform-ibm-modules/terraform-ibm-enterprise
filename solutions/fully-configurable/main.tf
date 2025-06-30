@@ -3,6 +3,7 @@ locals {
 
   should_create_group = try(var.enterprise_account_config.create_account_group, false)
 
+  # extract account and account group details from enterprise_account_config
   enterprise_account_group = local.should_create_group ? {
     key_name        = var.enterprise_account_config.parent_key_name
     name            = "${local.prefix}${var.enterprise_account_config.account_group_name}"
