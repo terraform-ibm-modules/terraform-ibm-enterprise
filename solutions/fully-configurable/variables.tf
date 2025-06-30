@@ -41,13 +41,6 @@ variable "prefix" {
   }
 }
 
-variable "region" {
-  type        = string
-  description = "The region to provision resources to."
-  default     = "us-south"
-  nullable    = false
-}
-
 ########################################################################################################################
 # enterprise variables
 ########################################################################################################################
@@ -64,39 +57,20 @@ variable "parent_enterprise_account_primary_contact_iam_id" {
   nullable    = false
 }
 
-variable "enterprise_account_group" {
-  type = list(object({
-    key_name        = string
-    name            = string
-    parent_key_name = optional(string, null)
-    owner_iam_id    = optional(string, null)
-  }))
-  description = "The list of account groups to be created under the parent enterprise account. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-account_and_account_group.md)."
-  default     = []
-
-  validation {
-    condition     = length(var.enterprise_account_group) == 0 || length(var.enterprise_account_group) == 1
-    error_message = "The 'enterprise_account_group' list cannot be greater than 1. Received ${length(var.enterprise_account_group)} elements."
-  }
-}
-
-variable "enterprise_account" {
-  type = list(object({
-    key_name               = string
-    name                   = string
-    parent_key_name        = optional(string, null)
-    owner_iam_id           = optional(string, null)
-    add_owner_iam_policies = optional(bool, true)
-    enterprise_iam_managed = optional(bool, true)
-    mfa                    = optional(string, "NONE")
-  }))
-  description = "The list of accounts to be created under the parent enterprise account. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-account_and_account_group.md)."
-  default     = []
-
-  validation {
-    condition     = length(var.enterprise_account) == 0 || length(var.enterprise_account) == 1
-    error_message = "The 'enterprise_account' list cannot be greater than 1. Received ${length(var.enterprise_account)} elements."
-  }
+variable "enterprise_account_config" {
+  type = object({
+    key_name                      = string
+    name                          = string
+    parent_key_name               = optional(string, null)
+    create_account_group          = optional(bool, false)
+    account_group_name            = optional(string, null)
+    account_group_parent_key_name = optional(string, null)
+    owner_iam_id                  = optional(string, null)
+    add_owner_iam_policies        = optional(bool, true)
+    enterprise_iam_managed        = optional(bool, true)
+    mfa                           = optional(string, "NONE")
+  })
+  description = "The account to be created under the parent enterprise account. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-enterprise_account_config.md)."
 }
 
 ##############################################################################
@@ -104,7 +78,7 @@ variable "enterprise_account" {
 ##############################################################################
 
 variable "trusted_profile_name" {
-  description = "The name of the trusted profile that will be created in the sub account and used to invite users after being assumed by the sub account service ID."
+  description = "The name of the trusted profile that will be created in the sub account and used to invite users after being assumed by the sub account service ID. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
   type        = string
   default     = "enable-service-id-to-invite-users"
 }
@@ -112,7 +86,7 @@ variable "trusted_profile_name" {
 variable "trusted_profile_description" {
   description = "The description for the trusted profile that will be created in the sub account and used to invite users after being assumed by the sub account service ID."
   type        = string
-  default     = "Trusted Profile for sub accounts with required access for inviting users"
+  default     = "Trusted Profile for sub account with required access for inviting users"
 }
 
 variable "access_groups" {

@@ -84,20 +84,12 @@ func TestFullyConfigurable(t *testing.T) {
 	prefix := "ep-da"
 	parentCRN := "crn:v1:bluemix:public:enterprise::a/1f27e30e31f0486980cb0b2657d483f7::enterprise:3e4723f82d754ef493651d63bc897ea4"
 	primaryContactIAMID := "IBMid-666000KAO3"
-	enterpriseAccountGroup := []map[string]any{
-		{
-			"key_name":     "group-key",
-			"name":         "test_account_group",
-			"owner_iam_id": "IBMid-664002EWSV",
-		},
-	}
-	enterpriseAccount := []map[string]any{
-		{
-			"key_name":               "acc-key",
-			"name":                   "test_account",
-			"add_owner_iam_policies": true, //this field enable child account to have IAM_APIKey with owner IAM policies
-			"owner_iam_id":           "IBMid-664002EWSV",
-		},
+	enterpriseAccountConfig := map[string]any{
+		"key_name":               "acc-key-1",
+		"name":                   "account_DA",
+		"create_account_group":   false,
+		"add_owner_iam_policies": true, // this field enable child account to have IAM_APIKey with owner IAM policies
+		"owner_iam_id":           "IBMid-664002EWSV",
 	}
 	accessGroups := map[string]any{
 		"my_first_access_group": map[string]any{
@@ -159,8 +151,7 @@ func TestFullyConfigurable(t *testing.T) {
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
 		{Name: "parent_enterprise_account_crn", Value: parentCRN, DataType: "string"},
 		{Name: "parent_enterprise_account_primary_contact_iam_id", Value: primaryContactIAMID, DataType: "string"},
-		{Name: "enterprise_account_group", Value: enterpriseAccountGroup, DataType: "list(object)"},
-		{Name: "enterprise_account", Value: enterpriseAccount, DataType: "list(object)"},
+		{Name: "enterprise_account_config", Value: enterpriseAccountConfig, DataType: "object"},
 		{Name: "access_groups", Value: accessGroups, DataType: "map(object)"},
 		{Name: "users_to_invite", Value: usersToInvite, DataType: "list(object)"},
 	}
@@ -180,20 +171,12 @@ func TestUpgradeFullyConfigurable(t *testing.T) {
 	prefix := "ep-upg"
 	parentCRN := "crn:v1:bluemix:public:enterprise::a/1f27e30e31f0486980cb0b2657d483f7::enterprise:3e4723f82d754ef493651d63bc897ea4"
 	primaryContactIAMID := "IBMid-666000KAO3"
-	enterpriseAccountGroup := []map[string]any{
-		{
-			"key_name":     "group-key",
-			"name":         "test_account_group",
-			"owner_iam_id": "IBMid-664002EWSV",
-		},
-	}
-	enterpriseAccount := []map[string]any{
-		{
-			"key_name":               "acc-key",
-			"name":                   "test_account",
-			"add_owner_iam_policies": true, //this field enable child account to have IAM_APIKey with owner IAM policies
-			"owner_iam_id":           "IBMid-664002EWSV",
-		},
+	enterpriseAccountConfig := map[string]any{
+		"key_name":               "acc-key-2",
+		"name":                   "account_DA_upg",
+		"create_account_group":   false,
+		"add_owner_iam_policies": true, // this field enable child account to have IAM_APIKey with owner IAM policies
+		"owner_iam_id":           "IBMid-664002EWSV",
 	}
 	accessGroups := map[string]any{
 		"my_first_access_group": map[string]any{
@@ -255,8 +238,7 @@ func TestUpgradeFullyConfigurable(t *testing.T) {
 		{Name: "prefix", Value: options.Prefix, DataType: "string"},
 		{Name: "parent_enterprise_account_crn", Value: parentCRN, DataType: "string"},
 		{Name: "parent_enterprise_account_primary_contact_iam_id", Value: primaryContactIAMID, DataType: "string"},
-		{Name: "enterprise_account_group", Value: enterpriseAccountGroup, DataType: "list(object)"},
-		{Name: "enterprise_account", Value: enterpriseAccount, DataType: "list(object)"},
+		{Name: "enterprise_account_config", Value: enterpriseAccountConfig, DataType: "object"},
 		{Name: "access_groups", Value: accessGroups, DataType: "map(object)"},
 		{Name: "users_to_invite", Value: usersToInvite, DataType: "list(object)"},
 	}

@@ -3,12 +3,12 @@ apiVersion: v1
 offerings:
   - name: deploy-arch-ibm-enterprise
     kind: solution
-    catalog_id: <TO BE ADDED>
-    offering_id: <TO BE ADDED>
+    catalog_id: 7df1e4ca-d54c-4fd0-82ce-3d13247308cd
+    offering_id: c33e447d-00a0-4a59-8de1-e607827da024
     variations:
       - name: fully-configurable
         mark_ready: true
         install_type: fullstack
         scc:
-          instance_id: <TO BE ADDED>
+          instance_id: 7a2983d7-bcee-40c9-93d3-7b235039920c # this is from the DAF Enterprise (1f27e30e31f0486980cb0b2657d483f7) account
           region: us-south

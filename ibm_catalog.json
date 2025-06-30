@@ -9,7 +9,7 @@
         "target_terraform",
         "terraform",
         "solution",
-        "support_ibm"
+        "security"
       ],
       "keywords": [
         "terraform",
@@ -64,54 +64,38 @@
               "key": "ibmcloud_api_key"
             },
             {
-              "key": "region",
-              "required": true,
-              "options": [
-                {
-                  "displayname": "Dallas (us-south)",
-                  "value": "us-south"
-                },
-                {
-                  "displayname": "Frankfurt (eu-de)",
-                  "value": "eu-de"
-                },
-                {
-                  "displayname": "London (eu-gb)",
-                  "value": "eu-gb"
-                },
-                {
-                  "displayname": "Madrid (eu-es)",
-                  "value": "eu-es"
-                },
-                {
-                  "displayname": "Osaka (jp-osa)",
-                  "value": "jp-osa"
-                },
-                {
-                  "displayname": "Sao Paulo (br-sao)",
-                  "value": "br-sao"
-                },
-                {
-                  "displayname": "Sydney (au-syd)",
-                  "value": "au-syd"
-                },
-                {
-                  "displayname": "Tokyo (jp-tok)",
-                  "value": "jp-tok"
-                },
-                {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
-                },
-                {
-                  "displayname": "Washington (us-east)",
-                  "value": "us-east"
-                }
-              ]
-            },
-            {
               "key": "prefix",
               "required": true
+            },
+            {
+              "key": "parent_enterprise_account_crn",
+              "required": true
+            },
+            {
+              "key": "parent_enterprise_account_primary_contact_iam_id",
+              "required": true
+            },
+            {
+              "key": "enterprise_account_config",
+              "required": true
+            },
+            {
+              "key": "trusted_profile_name"
+            },
+            {
+              "key": "trusted_profile_description"
+            },
+            {
+              "key": "access_groups"
+            },
+            {
+              "key": "users_to_invite",
+              "type": "array",
+              "custom_config": {
+                "type": "textarea",
+                "grouping": "deployment",
+                "original_grouping": "deployment"
+              }
             },
             {
               "key": "provider_visibility",
@@ -130,34 +114,6 @@
                 }
               ],
               "hidden": true
-            },
-            {
-              "key": "parent_enterprise_account_crn",
-              "required": true
-            },
-            {
-              "key": "parent_enterprise_account_primary_contact_iam_id",
-              "required":true
-            },
-
-            {
-              "key": "enterprise_account_group"
-            },
-            {
-              "key": "enterprise_account",
-              "required":true
-            },
-            {
-              "key": "trusted_profile_name"
-            },
-            {
-              "key": "trusted_profile_description"
-            },
-            {
-              "key": "access_groups"
-            },
-            {
-              "key": "users_to_invite"
             }
           ],
           "architecture": {

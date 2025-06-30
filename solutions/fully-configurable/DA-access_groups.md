@@ -1,4 +1,4 @@
-Configuring Access Groups
+# Configuring Access Groups
 
 The `access_groups` input variable allows you to define and configure multiple access groups within the new created enterprise sub account. Access groups are used to manage user permissions efficiently by grouping users and assigning policies to the group rather than individual users.
 

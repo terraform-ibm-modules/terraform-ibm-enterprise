@@ -1,21 +1,24 @@
 locals {
   prefix = var.prefix != null ? (trimspace(var.prefix) != "" ? "${trimspace(var.prefix)}-" : "") : ""
 
-  prefixed_enterprise_account_group = [
-    for account_group in var.enterprise_account_group : (
-      merge(account_group, {
-        name = "${local.prefix}${account_group.name}"
-      })
-    )
-  ]
+  should_create_group = try(var.enterprise_account_config.create_account_group, false)
 
-  prefixed_enterprise_account = [
-    for account in var.enterprise_account : (
-      merge(account, {
-        name = "${local.prefix}${account.name}"
-      })
-    )
-  ]
+  enterprise_account_group = local.should_create_group ? {
+    key_name        = var.enterprise_account_config.parent_key_name
+    name            = "${local.prefix}${var.enterprise_account_config.account_group_name}"
+    parent_key_name = var.enterprise_account_config.account_group_parent_key_name
+    owner_iam_id    = var.enterprise_account_config.owner_iam_id
+  } : {}
+
+  enterprise_account = {
+    key_name               = var.enterprise_account_config.key_name
+    name                   = "${local.prefix}${var.enterprise_account_config.name}"
+    parent_key_name        = var.enterprise_account_config.parent_key_name
+    owner_iam_id           = var.enterprise_account_config.owner_iam_id
+    add_owner_iam_policies = var.enterprise_account_config.add_owner_iam_policies
+    enterprise_iam_managed = var.enterprise_account_config.enterprise_iam_managed
+    mfa                    = var.enterprise_account_config.mfa
+  }
 
   prefixed_users_to_invite = [
     for user in var.users_to_invite : (
@@ -37,8 +40,8 @@ module "enterprise" {
   source                            = "../.."
   enterprise_crn                    = var.parent_enterprise_account_crn
   enterprise_primary_contact_iam_id = var.parent_enterprise_account_primary_contact_iam_id
-  enterprise_account_groups         = local.prefixed_enterprise_account_group
-  enterprise_accounts               = local.prefixed_enterprise_account
+  enterprise_account_groups         = local.should_create_group ? [local.enterprise_account_group] : []
+  enterprise_accounts               = [local.enterprise_account]
 }
 
 ########################################################################################################################
