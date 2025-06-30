@@ -2,5 +2,12 @@
   "ibmcloud_api_key": $VALIDATION_APIKEY,
   "prefix": $PREFIX,
   "parent_enterprise_account_crn": "crn:v1:bluemix:public:enterprise::a/1f27e30e31f0486980cb0b2657d483f7::enterprise:3e4723f82d754ef493651d63bc897ea4",
-  "parent_enterprise_account_primary_contact_iam_id": "IBMid-666000KAO3"
+  "parent_enterprise_account_primary_contact_iam_id": "IBMid-666000KAO3",
+  "enterprise_account_config": {
+    "unique_identifier"             : "acc-key-1",
+    "account_name"                  : "account_test",
+    "create_account_group"          : false,
+    "add_owner_iam_policies"        : true,
+    "owner_iam_id"                  : "IBMid-664002EWSV"
+  }
 }

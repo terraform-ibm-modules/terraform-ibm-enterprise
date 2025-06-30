@@ -12,8 +12,8 @@ This variable combines configuration for both the account and, if desired, its d
 
 #### Core Account Configuration:
 
-- `key_name` (required, string): A unique identifier for the account.
-- `name` (required, string): The display name of the account as it will appear in IBM Cloud.
+- `unique_identifier` (required, string): A unique identifier for the account.
+- `account_name` (required, string): The display name of the account as it will appear in IBM Cloud.
 - `parent_key_name` (optional, string): The key_name of the parent account group under which this account will be created.
 
 If `create_account_group` is `true`, this parent_key_name should match the `account_group_key_name` defined within this same enterprise_account_config.
@@ -41,8 +41,8 @@ These options are relevant when create_account_group is set to `true`.
 
 ```hcl
 {
-  key_name               = "my-new-account"
-  name                   = "account-1"
+  unique_identifier      = "my-new-account"
+  account_name           = "account-1"
   parent_key_name        = null # Creates directly under the enterprise
   owner_iam_id           = "IBMid-1234567890"
   add_owner_iam_policies = true
@@ -59,8 +59,8 @@ These options are relevant when create_account_group is set to `true`.
 
 ```hcl
 {
-  key_name               = "app-dev-account"
-  name                   = "account-2"
+  unique_identifier      = "app-dev-account"
+  account_name           = "account-2"
   parent_key_name        = "dev-team-group" # Links to the new group below
   owner_iam_id           = "IBMid-9876543210"
   add_owner_iam_policies = true

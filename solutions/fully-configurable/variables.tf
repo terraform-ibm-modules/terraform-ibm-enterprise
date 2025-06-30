@@ -59,8 +59,8 @@ variable "parent_enterprise_account_primary_contact_iam_id" {
 
 variable "enterprise_account_config" {
   type = object({
-    key_name                      = string
-    name                          = string
+    unique_identifier             = string
+    account_name                  = string
     parent_key_name               = optional(string, null)
     create_account_group          = optional(bool, false)
     account_group_name            = optional(string, null)

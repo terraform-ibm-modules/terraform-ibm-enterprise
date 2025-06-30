@@ -55,8 +55,8 @@ func TestFullyConfigurable(t *testing.T) {
 	parentCRN := "crn:v1:bluemix:public:enterprise::a/1f27e30e31f0486980cb0b2657d483f7::enterprise:3e4723f82d754ef493651d63bc897ea4"
 	primaryContactIAMID := "IBMid-666000KAO3"
 	enterpriseAccountConfig := map[string]any{
-		"key_name":               "acc-key-1",
-		"name":                   "account_DA",
+		"unique_identifier":      "acc-key-1",
+		"account_name":           "account_DA",
 		"create_account_group":   false,
 		"add_owner_iam_policies": true, // this field enable child account to have IAM_APIKey with owner IAM policies
 		"owner_iam_id":           "IBMid-664002EWSV",
@@ -142,8 +142,8 @@ func TestUpgradeFullyConfigurable(t *testing.T) {
 	parentCRN := "crn:v1:bluemix:public:enterprise::a/1f27e30e31f0486980cb0b2657d483f7::enterprise:3e4723f82d754ef493651d63bc897ea4"
 	primaryContactIAMID := "IBMid-666000KAO3"
 	enterpriseAccountConfig := map[string]any{
-		"key_name":               "acc-key-2",
-		"name":                   "account_DA_upg",
+		"unique_identifier":      "acc-key-2",
+		"account_name":           "account_DA_upg",
 		"create_account_group":   false,
 		"add_owner_iam_policies": true, // this field enable child account to have IAM_APIKey with owner IAM policies
 		"owner_iam_id":           "IBMid-664002EWSV",
