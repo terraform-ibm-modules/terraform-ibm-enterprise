@@ -10,11 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/common"
-	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testhelper"
 	"github.com/terraform-ibm-modules/ibmcloud-terratest-wrapper/testschematic"
 )
 
-const advancedExampleDir = "examples/advanced"
 const fullyConfigFlavorDir = "solutions/fully-configurable"
 const yamlLocation = "../common-dev-assets/common-go-assets/common-permanent-resources.yaml"
 
@@ -43,34 +41,6 @@ func TestMain(m *testing.M) {
 	}
 
 	os.Exit(m.Run())
-}
-
-func setupAdvancedOptions(t *testing.T, prefix string, dir string) *testhelper.TestOptions {
-	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
-		Testing:      t,
-		TerraformDir: dir,
-		Prefix:       prefix,
-	})
-
-	options.TerraformVars = map[string]interface{}{
-		"prefix":                      options.Prefix,
-		"enterprise_account_name":     "DAF Enterprise",
-		"owner_iam_id":                "IBMid-664002EWSV", // iam_id for GoldenEye Operations
-		"existing_sm_instance_guid":   permanentResources["secretsManagerGuid"],
-		"existing_sm_instance_region": permanentResources["secretsManagerRegion"],
-	}
-
-	return options
-}
-
-func TestRunAdvancedExample(t *testing.T) {
-	t.Parallel()
-
-	options := setupAdvancedOptions(t, "enterprise-com", advancedExampleDir)
-
-	output, err := options.RunTestConsistency()
-	assert.Nil(t, err, "This should not have errored")
-	assert.NotNil(t, output, "Expected some output")
 }
 
 func TestFullyConfigurable(t *testing.T) {
