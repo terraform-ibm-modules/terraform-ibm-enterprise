@@ -100,7 +100,7 @@ No resources.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_enterprise_account_groups"></a> [enterprise\_account\_groups](#input\_enterprise\_account\_groups) | List of enterprise child account\_groups in the enterprise | `list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null) }))` | `[]` | no |
-| <a name="input_enterprise_accounts"></a> [enterprise\_accounts](#input\_enterprise\_accounts) | List of enterprise child accounts in the enterprise | `list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null), add_owner_iam_policies = optional(bool, false) }))` | `[]` | no |
+| <a name="input_enterprise_accounts"></a> [enterprise\_accounts](#input\_enterprise\_accounts) | List of enterprise child accounts in the enterprise | `list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null), add_owner_iam_policies = optional(bool, false), enterprise_iam_managed = optional(bool, true), mfa = optional(string, "NONE") }))` | `[]` | no |
 | <a name="input_enterprise_crn"></a> [enterprise\_crn](#input\_enterprise\_crn) | The CRN of the parent Enterprise account to use. | `string` | n/a | yes |
 | <a name="input_enterprise_primary_contact_iam_id"></a> [enterprise\_primary\_contact\_iam\_id](#input\_enterprise\_primary\_contact\_iam\_id) | The IAM id of the parent Enterprise account owner. | `string` | n/a | yes |
 
