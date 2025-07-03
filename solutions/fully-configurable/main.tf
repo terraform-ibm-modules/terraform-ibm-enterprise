@@ -11,15 +11,15 @@ locals {
     owner_iam_id    = var.enterprise_account_config.owner_iam_id
   } : {}
 
-  enterprise_account = {
-    key_name               = var.enterprise_account_config.unique_identifier
-    name                   = "${local.prefix}${var.enterprise_account_config.account_name}"
-    parent_key_name        = var.enterprise_account_config.parent_key_name
-    owner_iam_id           = var.enterprise_account_config.owner_iam_id
-    add_owner_iam_policies = var.enterprise_account_config.add_owner_iam_policies
-    enterprise_iam_managed = var.enterprise_account_config.enterprise_iam_managed
-    mfa                    = var.enterprise_account_config.mfa
-  }
+  # enterprise_account = {
+  #   key_name               = var.enterprise_account_config.unique_identifier
+  #   name                   = "${local.prefix}${var.enterprise_account_config.account_name}"
+  #   parent_key_name        = var.enterprise_account_config.parent_key_name
+  #   owner_iam_id           = var.enterprise_account_config.owner_iam_id
+  #   add_owner_iam_policies = var.enterprise_account_config.add_owner_iam_policies
+  #   enterprise_iam_managed = var.enterprise_account_config.enterprise_iam_managed
+  #   mfa                    = var.enterprise_account_config.mfa
+  # }
 
   prefixed_users_to_invite = [
     for user in var.users_to_invite : (
@@ -42,7 +42,7 @@ module "enterprise" {
   enterprise_crn                    = var.parent_enterprise_account_crn
   enterprise_primary_contact_iam_id = var.parent_enterprise_account_primary_contact_iam_id
   enterprise_account_groups         = local.should_create_group ? [local.enterprise_account_group] : []
-  enterprise_accounts               = [local.enterprise_account]
+  enterprise_accounts               = var.enterprise_accounts
 }
 
 ########################################################################################################################

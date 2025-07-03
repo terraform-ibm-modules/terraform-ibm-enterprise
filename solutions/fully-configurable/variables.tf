@@ -73,6 +73,20 @@ variable "enterprise_account_config" {
   description = "The account to be created under the parent enterprise account. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-enterprise_account_config.md)."
 }
 
+variable "enterprise_accounts" {
+  type = list(object({
+    key_name             = string
+    name                  = string
+    parent_key_name               = optional(string, null)
+    owner_iam_id                  = optional(string, null)
+    add_owner_iam_policies        = optional(bool, true)
+    enterprise_iam_managed        = optional(bool, true)
+    mfa                           = optional(string, "NONE")
+  }))
+  description = "The account to be created under the parent enterprise account. [Learn more](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/tree/main/solutions/fully-configurable/DA-enterprise_account_config.md)."
+  default = []
+}
+
 ##############################################################################
 # trusted profile and access group policy variables
 ##############################################################################
