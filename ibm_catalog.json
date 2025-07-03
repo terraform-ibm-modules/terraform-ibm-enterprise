@@ -80,6 +80,10 @@
               "required": true
             },
             {
+              "key": "enterprise_accounts",
+              "required": true
+            },
+            {
               "key": "trusted_profile_name"
             },
             {
@@ -89,13 +93,7 @@
               "key": "access_groups"
             },
             {
-              "key": "users_to_invite",
-              "type": "array",
-              "custom_config": {
-                "type": "textarea",
-                "grouping": "deployment",
-                "original_grouping": "deployment"
-              }
+              "key": "users_to_invite"
             },
             {
               "key": "provider_visibility",
