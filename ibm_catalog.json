@@ -9,7 +9,8 @@
         "target_terraform",
         "terraform",
         "solution",
-        "security"
+        "security",
+        "converged_infra"
       ],
       "keywords": [
         "terraform",
@@ -17,7 +18,6 @@
         "enterprise account",
         "IaC",
         "infrastructure as code",
-        "terraform",
         "solution"
       ],
       "short_description": "Creates an IBM enterprise account and invite users to the account.",
