@@ -84,7 +84,7 @@ module "iam_access_group" {
     ibm = ibm.sub-account
   }
   source            = "terraform-ibm-modules/iam-access-group/ibm"
-  version           = "1.5.9"
+  version           = "1.5.10"
   for_each          = var.access_groups
   access_group_name = "${local.prefix}${each.value.access_group_name}"
   dynamic_rules     = each.value.dynamic_rules
