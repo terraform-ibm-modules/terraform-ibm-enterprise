@@ -250,7 +250,7 @@ module "resource_group" {
 #Create a new SM instance if not using an existing one
 module "secrets_manager" {
   source               = "terraform-ibm-modules/secrets-manager/ibm"
-  version              = "2.8.10"
+  version              = "2.9.0"
   count                = var.existing_sm_instance_guid == null ? 1 : 0
   resource_group_id    = module.resource_group.resource_group_id
   region               = local.sm_region
@@ -274,7 +274,7 @@ module "secrets_manager_group" {
 
 module "secrets_manager_arbitrary_secret" {
   source                  = "terraform-ibm-modules/secrets-manager-secret/ibm"
-  version                 = "1.8.0"
+  version                 = "1.9.0"
   region                  = local.sm_region
   secrets_manager_guid    = local.sm_guid
   secret_group_id         = module.secrets_manager_group.secret_group_id
