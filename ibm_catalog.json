@@ -127,7 +127,7 @@
               {
                 "diagram": {
                   "caption": "IBM Enterprise architecture",
-                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-enterprise/main/reference-architecture/enterprise.svg",
+                  "url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-enterprise/main/reference-architectures/enterprise.svg",
                   "type": "image/svg+xml"
                 },
                 "description": "**IBM Cloud Enterprise** <br/> <br/> <b>Description</b> <br/>This deployable architecture automates the structured setup and management of IBM Cloud Enterprise accounts and user access. It streamlines the creation of new accounts and account groups within an enterprise, enabling centralized governance. <br/> <br/> <b>Inviting Users and Access Group</b> </br>This solution simplifies user onboarding by automating the invitation process and assigning users to pre-configured access groups, ensuring they have the correct permissions from the start. A trusted profile is established to securely facilitate these user invitations and manage IAM operations within the newly provisioned accounts."
