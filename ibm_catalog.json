@@ -84,7 +84,7 @@
               "value_constraints": [
                 {
                   "type": "regex",
-                  "description": "The value provided for 'existing_vpc_crn' is not valid.",
+                  "description": "The value provided for 'parent_enterprise_account_crn' is not valid.",
                   "value": "^crn:v1:bluemix:[^:]+:enterprise::a/[0-9a-fA-F]{32}::enterprise:[0-9a-fA-F]{32}$"
                 }
               ]
