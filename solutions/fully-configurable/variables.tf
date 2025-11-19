@@ -49,6 +49,14 @@ variable "parent_enterprise_account_crn" {
   type        = string
   description = "The CRN of the parent Enterprise account to use."
   nullable    = false
+
+  validation {
+    condition = anytrue([
+      can(regex("^crn:v1:bluemix:[^:]+:enterprise::a/[0-9a-fA-F]{32}::enterprise:[0-9a-fA-F]{32}$", var.parent_enterprise_account_crn)),
+      var.parent_enterprise_account_crn == null,
+    ])
+    error_message = "The value provided for 'parent_enterprise_account_crn' is not valid."
+  }
 }
 
 variable "parent_enterprise_account_primary_contact_iam_id" {
