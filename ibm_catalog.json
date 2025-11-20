@@ -21,7 +21,7 @@
         "solution"
       ],
       "short_description": "Creates an IBM enterprise account and invite users to the account.",
-      "long_description": "This deployable architecture automates the creation of an IBM enterprise account under a parent IBM enterprise and invite users to the new account. Optionally it also creates an account group in order to organize and manage accounts hierarchically and provisions creation of multiple access groups to be assigned to the newly invited users. For more details on IBM enterprise, [see here](https://cloud.ibm.com/docs/enterprise-management?topic=enterprise-management-what-is-enterprise).",
+      "long_description": "This deployable architecture automates the creation of an IBM enterprise account under a parent IBM enterprise and invite users to the new account. Optionally it also creates an account group in order to organize and manage accounts hierarchically and provisions creation of multiple access groups to be assigned to the newly invited users. For more details on IBM enterprise, [see here](https://cloud.ibm.com/docs/enterprise-management?topic=enterprise-management-what-is-enterprise). \n\nLeverage [Terraform IBM Modules](https://github.com/terraform-ibm-modules) to shape and scale your solutions. You can integrate Terraform IBM Modules (TIM) to extend functionality and design a solution tailored to your environment and operations needs. These modules offer reusable, customizable elements that follow IBM Cloud's recommended practices. You can access the [source code and documentation](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise) and use it to extend your current architecture or create new solutions.",
       "offering_docs_url": "https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/blob/main/solutions/fully-configurable/README.md",
       "offering_icon_url": "https://raw.githubusercontent.com/terraform-ibm-modules/terraform-ibm-enterprise/main/images/enterprise.svg",
       "provider_name": "IBM",
@@ -41,6 +41,10 @@
         {
           "title": "Invite Users",
           "description": "Sends invites to new users for joining the new enterprise account."
+        },
+        {
+          "title": "Composable and Extensible Architecture",
+          "description": "This architecture illustrates how Terraform IBM Modules(TIM) can be integrated to deliver a complete solution on IBM Cloud. Each module is a reusable, and validated component for security, compliance, and operational IBM best practices. You can deploy this architecture as-is or configure it as code by leveraging the underlying modules to fit your specific requirements. Explore the [source code and documentation](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise) to adapt, extend, or create entirely new solutions using these building blocks."
         }
       ],
       "support_details": "This product is in the community registry, as such support is handled through the originated repo. If you experience issues please open an issue in that repository [https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/issues](https://github.com/terraform-ibm-modules/terraform-ibm-enterprise/issues). Please note this product is not supported via the IBM Cloud Support Center.",
