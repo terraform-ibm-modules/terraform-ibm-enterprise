@@ -23,7 +23,7 @@ variable "provider_visibility" {
 variable "prefix" {
   type        = string
   nullable    = true
-  description = "The prefix to be added to all resources created by this solution. To skip using a prefix, set this value to null or an empty string. The prefix must begin with a lowercase letter and may contain only lowercase letters, digits, and hyphens '-'. It should not exceed 16 characters, must not end with a hyphen('-'), and can not contain consecutive hyphens ('--'). Example: prod-us-south. [Learn more](https://terraform-ibm-modules.github.io/documentation/#/prefix.md)."
+  description = "The prefix to add to all resources that this solution creates (e.g `prod`, `test`, `dev`). To skip using a prefix, set this value to null or an empty string. [Learn more](https://terraform-ibm-modules.github.io/documentation/#/prefix.md)."
 
   validation {
     # - null and empty string is allowed
@@ -49,6 +49,14 @@ variable "parent_enterprise_account_crn" {
   type        = string
   description = "The CRN of the parent Enterprise account to use."
   nullable    = false
+
+  validation {
+    condition = anytrue([
+      can(regex("^crn:v1:bluemix:[^:]+:enterprise::a/[0-9a-fA-F]{32}::enterprise:[0-9a-fA-F]{32}$", var.parent_enterprise_account_crn)),
+      var.parent_enterprise_account_crn == null,
+    ])
+    error_message = "The value provided for 'parent_enterprise_account_crn' is not valid."
+  }
 }
 
 variable "parent_enterprise_account_primary_contact_iam_id" {
