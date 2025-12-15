@@ -115,7 +115,9 @@
                 "grouping": "deployment",
                 "original_grouping": "deployment",
                 "config_constraints": {
-                  "supportedLanguages": ["hcl"]
+                  "supportedLanguages": [
+                    "hcl"
+                  ]
                 }
               }
             },
