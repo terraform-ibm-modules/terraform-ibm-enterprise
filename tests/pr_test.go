@@ -3,7 +3,6 @@ package test
 
 import (
 	"log"
-	"math/rand"
 	"os"
 	"testing"
 
@@ -50,7 +49,7 @@ func TestFullyConfigurable(t *testing.T) {
 	val, present := os.LookupEnv(checkVariable)
 	require.True(t, present, checkVariable+" environment variable not set")
 	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-	region := validRegions[rand.Intn(len(validRegions))]
+	region := validRegions[common.CryptoIntn(len(validRegions))]
 	prefix := "ep-da"
 	parentCRN := "crn:v1:bluemix:public:enterprise::a/1f27e30e31f0486980cb0b2657d483f7::enterprise:3e4723f82d754ef493651d63bc897ea4"
 	primaryContactIAMID := "IBMid-666000KAO3"
@@ -137,7 +136,7 @@ func TestUpgradeFullyConfigurable(t *testing.T) {
 	val, present := os.LookupEnv(checkVariable)
 	require.True(t, present, checkVariable+" environment variable not set")
 	require.NotEqual(t, "", val, checkVariable+" environment variable is empty")
-	region := validRegions[rand.Intn(len(validRegions))]
+	region := validRegions[common.CryptoIntn(len(validRegions))]
 	prefix := "ep-upg"
 	parentCRN := "crn:v1:bluemix:public:enterprise::a/1f27e30e31f0486980cb0b2657d483f7::enterprise:3e4723f82d754ef493651d63bc897ea4"
 	primaryContactIAMID := "IBMid-666000KAO3"
