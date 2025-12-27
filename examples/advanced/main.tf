@@ -60,7 +60,7 @@ locals {
 
 module "create_trusted_profile_template" {
   source               = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
-  version              = "3.2.13"
+  version              = "3.2.14"
   template_name        = "${var.prefix}-enable-service-id-to-invite-users-template"
   template_description = "Trusted Profile template for Enterprise with required access for inviting users"
   profile_name         = "${var.prefix}-enable-service-id-to-invite-users"
@@ -274,7 +274,7 @@ module "secrets_manager_group" {
 
 module "secrets_manager_arbitrary_secret" {
   source                  = "terraform-ibm-modules/secrets-manager-secret/ibm"
-  version                 = "1.9.5"
+  version                 = "1.9.6"
   region                  = local.sm_region
   secrets_manager_guid    = local.sm_guid
   secret_group_id         = module.secrets_manager_group.secret_group_id
