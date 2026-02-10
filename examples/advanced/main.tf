@@ -108,6 +108,11 @@ resource "ibm_iam_trusted_profile_template_assignment" "account_assignment_for_n
   provisioner "local-exec" {
     command = "echo Assigned template to Account: ${module.enterprise.enterprise_accounts_iam_response[count.index].id}"
   }
+
+  # temp workaround for https://github.com/IBM-Cloud/terraform-provider-ibm/issues/6216
+  lifecycle {
+    ignore_changes = [resources]
+  }
 }
 
 ########################################################################################################################
