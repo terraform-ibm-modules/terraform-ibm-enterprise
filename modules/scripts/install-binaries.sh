@@ -38,8 +38,8 @@ source "${COMMON_BASH_DIR}/ibmcloud/cli.sh"
 
 echo "Installing ibmcloud."
 install_ibmcloud "latest" "${DIRECTORY}" "true" || true
-echo "Installing ibmcloud code engine plugin."
-install_ibmcloud_plugins "code-engine" "${DIRECTORY}" "true" || true
+echo "Installing ibmcloud iam plugin."
+install_ibmcloud_plugins "iam" "${DIRECTORY}" "true" || true
 
 rm -rf "$TMP_DIR"
 
