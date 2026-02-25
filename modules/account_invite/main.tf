@@ -4,7 +4,7 @@ data "ibm_iam_trusted_profiles" "iam_trusted_profiles" {
   name       = var.existing_trusted_profile_name
 }
 
-resource "terraform_data" "terraform_data" {
+resource "terraform_data" install_required_binaries"  {
   count = var.install_required_binaries ? 1 : 0
   triggers_replace = {
     user_email_trigger           = each.value.email
