@@ -5,7 +5,7 @@ data "ibm_enterprise_accounts" "enterprise_accounts" {
 
 # Call root level module to create a hierarchy of enterprise child accounts and account groups
 module "enterprise" {
-  source                            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-enterprise?ref=update-binaries-enterprise"
+  source                            = "../.."
   enterprise_crn                    = data.ibm_enterprise_accounts.enterprise_accounts.accounts[0].parent
   enterprise_primary_contact_iam_id = data.ibm_enterprise_accounts.enterprise_accounts.accounts[0].owner_iam_id
   enterprise_account_groups = [
