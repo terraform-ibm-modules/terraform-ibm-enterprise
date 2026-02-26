@@ -1,5 +1,5 @@
 locals {
-  binaries_path           = "/tmp"
+  binaries_path = "/tmp"
 }
 
 data "ibm_iam_trusted_profiles" "iam_trusted_profiles" {
@@ -17,7 +17,7 @@ resource "terraform_data" "install_required_binaries" {
 }
 
 resource "terraform_data" "invite_user" {
-  for_each = { for idx, user_obj in var.users_to_invite : idx => user_obj }
+  for_each   = { for idx, user_obj in var.users_to_invite : idx => user_obj }
   depends_on = [terraform_data.install_required_binaries]
   triggers_replace = {
     user_email_trigger           = each.value.email
