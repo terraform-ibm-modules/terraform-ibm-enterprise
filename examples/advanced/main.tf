@@ -172,8 +172,8 @@ resource "ibm_iam_access_group_template_assignment" "iam_access_group_template_a
     module.enterprise,
     ibm_iam_access_group_template.initial_access_group_template
   ]
-  for_each         = { for account in module.enterprise.enterprise_accounts_iam_response : account.name => account }
-  target           = each.value.id
+  for_each         = { for idx, account in module.enterprise.enterprise_accounts : idx => account }
+  target           = split("/", each.value.crn)[7]
   target_type      = "Account"
   template_id      = split("/", ibm_iam_access_group_template.initial_access_group_template.id)[0]
   template_version = ibm_iam_access_group_template.initial_access_group_template.version
