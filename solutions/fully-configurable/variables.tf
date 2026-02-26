@@ -146,10 +146,3 @@ variable "users_to_invite" {
   }))
   default = [] # Allow for an empty list
 }
-
-variable "install_required_binaries" {
-  type        = bool
-  default     = true
-  description = "When true, run a script to ensure required CLI binary IBM cloud cli is available in the runtime; if missing the script will attempt to download them to /tmp. Set to false to skip."
-  nullable    = false
-}
