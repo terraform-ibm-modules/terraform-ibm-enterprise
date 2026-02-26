@@ -5,7 +5,7 @@ data "ibm_enterprise_accounts" "enterprise_accounts" {
 
 # Call root level module to create a hierarchy of enterprise child accounts and account groups
 module "enterprise" {
-  source                            = "../.."
+  source                            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-enterprise?ref=update-binaries-enterprise"
   enterprise_crn                    = data.ibm_enterprise_accounts.enterprise_accounts.accounts[0].parent
   enterprise_primary_contact_iam_id = data.ibm_enterprise_accounts.enterprise_accounts.accounts[0].owner_iam_id
   enterprise_account_groups = [
@@ -191,7 +191,7 @@ module "invite_users_account_1" {
     ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts,
     ibm_iam_access_group_template_assignment.iam_access_group_template_assignment_instance
   ]
-  source                        = "../../modules/account_invite"
+  source                        = "git::https://github.com/terraform-ibm-modules/terraform-ibm-enterprise?ref=update-binaries-enterprise/modules/account_invite"
   ibmcloud_api_key              = module.enterprise.enterprise_accounts_iam_response[0].iam_apikey
   existing_account_id           = module.enterprise.enterprise_accounts_iam_response[0].id
   existing_account_service_id   = replace(module.enterprise.enterprise_accounts_iam_response[0].iam_service_id, "iam-", "")
@@ -213,7 +213,7 @@ module "invite_users_account_2" {
     ibm_iam_trusted_profile_template_assignment.account_assignment_for_new_accounts,
     ibm_iam_access_group_template_assignment.iam_access_group_template_assignment_instance
   ]
-  source                        = "../../modules/account_invite"
+  source                        = "git::https://github.com/terraform-ibm-modules/terraform-ibm-enterprise?ref=update-binaries-enterprise/modules/account_invite"
   ibmcloud_api_key              = module.enterprise.enterprise_accounts_iam_response[1].iam_apikey
   existing_account_id           = module.enterprise.enterprise_accounts_iam_response[1].id
   existing_account_service_id   = replace(module.enterprise.enterprise_accounts_iam_response[1].iam_service_id, "iam-", "")
