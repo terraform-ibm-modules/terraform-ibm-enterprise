@@ -5,7 +5,7 @@ data "ibm_enterprise_accounts" "enterprise_accounts" {
 
 # Call root level module to create 1 account group with 1 account in it
 module "enterprise" {
-  source                            = "git::https://github.com/terraform-ibm-modules/terraform-ibm-enterprise?ref=update-binaries-enterprise"
+  source                            = "../.."
   enterprise_crn                    = data.ibm_enterprise_accounts.enterprise_accounts.accounts[0].parent
   enterprise_primary_contact_iam_id = data.ibm_enterprise_accounts.enterprise_accounts.accounts[0].owner_iam_id
   enterprise_account_groups = [
