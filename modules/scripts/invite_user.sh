@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# The binaries downloaded by the install-binaries script are located in the /tmp directory.
+export PATH=$PATH:${1:-"/tmp"}
+export IBMCLOUD_HOME=${1:-"/tmp"}
+
 # Authenticate with the IBM Cloud CLI using the API key
 ibmcloud login --apikey "$API_KEY" --no-region >/dev/null 2>&1
 
