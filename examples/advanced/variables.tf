@@ -7,7 +7,7 @@ variable "ibmcloud_api_key" {
 variable "prefix" {
   type        = string
   description = "Prefix to append to all resources created by this example"
-  default     = "naina-test"
+  default     = "nithya-test"
 }
 
 variable "enterprise_account_name" {
