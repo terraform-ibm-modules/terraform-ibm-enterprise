@@ -21,7 +21,7 @@ resource "terraform_data" "invite_user" {
   depends_on = [terraform_data.install_required_binaries]
   triggers_replace = {
     user_email_trigger           = each.value.email
-    user_access_groups_trigger   = join(",", each.value.exisiting_access_groups)
+    user_access_groups_trigger   = join(",", each.value.existing_access_groups)
     trusted_profile_name_trigger = var.existing_trusted_profile_name
   }
 
@@ -30,7 +30,7 @@ resource "terraform_data" "invite_user" {
     environment = {
       API_KEY            = var.ibmcloud_api_key
       USER_EMAIL         = each.value.email
-      USER_ACCESS_GROUPS = join(",", each.value.exisiting_access_groups) # Join access groups with a comma
+      USER_ACCESS_GROUPS = join(",", each.value.existing_access_groups) # Join access groups with a comma
       SERVICE_ID         = var.existing_account_service_id
       TRUSTED_PROFILE_ID = data.ibm_iam_trusted_profiles.iam_trusted_profiles[0].profiles[0].id
     }

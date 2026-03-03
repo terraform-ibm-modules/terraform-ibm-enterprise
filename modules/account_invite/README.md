@@ -13,7 +13,6 @@ Features :
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.79.2, < 2.0.0 |
-| <a name="requirement_null"></a> [null](#requirement\_null) | >= 3.2.1, <4.0.0 |
 
 ### Modules
 
@@ -36,7 +35,7 @@ No modules.
 | <a name="input_existing_trusted_profile_name"></a> [existing\_trusted\_profile\_name](#input\_existing\_trusted\_profile\_name) | The trusted profile used to send invite to the users. It needs Administrator access on All Identity and Access enabled services. | `string` | n/a | yes |
 | <a name="input_ibmcloud_api_key"></a> [ibmcloud\_api\_key](#input\_ibmcloud\_api\_key) | The apikey used to authenticate to the account in the enterprise where users are to be invited. | `string` | n/a | yes |
 | <a name="input_install_required_binaries"></a> [install\_required\_binaries](#input\_install\_required\_binaries) | When true, runs a script to ensure the required IBM Cloud CLI binary is available in the runtime. If missing, the script will attempt to download it to /tmp. Set to false to skip this step. | `bool` | `true` | no |
-| <a name="input_users_to_invite"></a> [users\_to\_invite](#input\_users\_to\_invite) | A list containing the email ID of user to be invited to an enterprise account and the list of access groups that needs to be assigned to the user | <pre>list(object({<br/>    email                   = string<br/>    exisiting_access_groups = optional(list(string), [])<br/>  }))</pre> | `[]` | no |
+| <a name="input_users_to_invite"></a> [users\_to\_invite](#input\_users\_to\_invite) | A list containing the email ID of user to be invited to an enterprise account and the list of access groups that needs to be assigned to the user | <pre>list(object({<br/>    email                  = string<br/>    existing_access_groups = optional(list(string), [])<br/>  }))</pre> | `[]` | no |
 
 ### Outputs
 

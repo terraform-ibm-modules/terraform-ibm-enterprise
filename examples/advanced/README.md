@@ -14,7 +14,7 @@ Assign the trusted profile template to the new sub accounts that needs to invite
 Create new access group template to be assigned to sub accounts that provide new invited users the initial access.
 Runs a script to login to each sub account and invite users using their email IDs.
 Create a new Secrets Manager instance if one is not passed in and configure it with a private cert engine.
-Create a new arbitary secret with the value set as iam_apikey value.
+Create a new arbitrary secret with the value set as iam_apikey value.
 
 <!-- BEGIN SCHEMATICS DEPLOY TIP HOOK -->
 :information_source: Ctrl/Cmd+Click or right-click on the Schematics deploy button to open in a new tab

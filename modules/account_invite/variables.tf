@@ -22,8 +22,8 @@ variable "existing_account_id" {
 variable "users_to_invite" {
   description = "A list containing the email ID of user to be invited to an enterprise account and the list of access groups that needs to be assigned to the user"
   type = list(object({
-    email                   = string
-    exisiting_access_groups = optional(list(string), [])
+    email                  = string
+    existing_access_groups = optional(list(string), [])
   }))
   default = [] # Allow for an empty list
 }
