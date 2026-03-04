@@ -10,6 +10,11 @@ data "ibm_iam_trusted_profiles" "iam_trusted_profiles" {
 
 resource "terraform_data" "install_required_binaries" {
   count = var.install_required_binaries ? 1 : 0
+  triggers_replace = {
+    users_trigger                = join(",", [for user in var.users_to_invite : user.email])
+    access_groups_trigger        = join(",", flatten([for user in var.users_to_invite : user.existing_access_groups]))
+    trusted_profile_name_trigger = var.existing_trusted_profile_name
+  }
   provisioner "local-exec" {
     command     = "${path.module}/../scripts/install-binaries.sh ${local.binaries_path}"
     interpreter = ["/bin/bash", "-c"]
