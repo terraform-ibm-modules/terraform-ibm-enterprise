@@ -91,8 +91,8 @@ func TestFullyConfigurable(t *testing.T) {
 	}
 	usersToInvite := []map[string]any{
 		{
-			"email":                   "goldeneye.development@ibm.com",
-			"exisiting_access_groups": []string{"team-alpha-access"},
+			"email":                  "goldeneye.development@ibm.com",
+			"existing_access_groups": []string{"team-alpha-access"},
 		},
 	}
 
@@ -178,8 +178,8 @@ func TestUpgradeFullyConfigurable(t *testing.T) {
 	}
 	usersToInvite := []map[string]any{
 		{
-			"email":                   "goldeneye.development@ibm.com",
-			"exisiting_access_groups": []string{"team-alpha-access"},
+			"email":                  "goldeneye.development@ibm.com",
+			"existing_access_groups": []string{"team-alpha-access"},
 		},
 	}
 

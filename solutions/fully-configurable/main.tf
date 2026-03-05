@@ -24,8 +24,8 @@ locals {
   prefixed_users_to_invite = [
     for user in var.users_to_invite : (
       merge(user, {
-        exisiting_access_groups = [
-          for group_name in user.exisiting_access_groups :
+        existing_access_groups = [
+          for group_name in user.existing_access_groups :
           "${local.prefix}${group_name}"
         ]
       })
