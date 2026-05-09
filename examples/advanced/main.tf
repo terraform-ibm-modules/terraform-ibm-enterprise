@@ -255,7 +255,7 @@ module "resource_group" {
 #Create a new SM instance if not using an existing one
 module "secrets_manager" {
   source               = "terraform-ibm-modules/secrets-manager/ibm"
-  version              = "2.15.0"
+  version              = "2.15.1"
   count                = var.existing_sm_instance_guid == null ? 1 : 0
   resource_group_id    = module.resource_group.resource_group_id
   region               = local.sm_region
@@ -267,7 +267,7 @@ module "secrets_manager" {
 # Create a secret group to place the certificate in
 module "secrets_manager_group" {
   source                   = "terraform-ibm-modules/secrets-manager-secret-group/ibm"
-  version                  = "1.5.1"
+  version                  = "1.5.2"
   region                   = local.sm_region
   secrets_manager_guid     = local.sm_guid
   secret_group_name        = "${var.prefix}-certs"
