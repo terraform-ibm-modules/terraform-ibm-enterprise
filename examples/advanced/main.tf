@@ -60,7 +60,7 @@ locals {
 
 module "create_trusted_profile_template" {
   source               = "terraform-ibm-modules/trusted-profile/ibm//modules/trusted-profile-template"
-  version              = "4.1.0"
+  version              = "4.2.0"
   template_name        = "${var.prefix}-enable-service-id-to-invite-users-template"
   template_description = "Trusted Profile template for Enterprise with required access for inviting users"
   profile_name         = "${var.prefix}-enable-service-id-to-invite-users"
