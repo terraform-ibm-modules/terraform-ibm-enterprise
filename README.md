@@ -99,14 +99,14 @@ module "enterprise" {
 ### Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_ibm"></a> [ibm](#requirement\_ibm) | >= 1.79.2, < 3.0.0 |
 
 ### Modules
 
 | Name | Source | Version |
-|------|--------|---------|
+| ---- | ------ | ------- |
 | <a name="module_dynamic_values"></a> [dynamic\_values](#module\_dynamic\_values) | ./modules/dynamic_values | n/a |
 | <a name="module_enterprise_hierarchy_depth_0"></a> [enterprise\_hierarchy\_depth\_0](#module\_enterprise\_hierarchy\_depth\_0) | ./modules/enterprise_hierarchy | n/a |
 | <a name="module_enterprise_hierarchy_depth_1"></a> [enterprise\_hierarchy\_depth\_1](#module\_enterprise\_hierarchy\_depth\_1) | ./modules/enterprise_hierarchy | n/a |
@@ -119,7 +119,7 @@ No resources.
 ### Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_enterprise_account_groups"></a> [enterprise\_account\_groups](#input\_enterprise\_account\_groups) | List of enterprise child account\_groups in the enterprise | `list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null) }))` | `[]` | no |
 | <a name="input_enterprise_accounts"></a> [enterprise\_accounts](#input\_enterprise\_accounts) | List of enterprise child accounts in the enterprise | `list(object({ name = string, key_name = string, parent_key_name = optional(string, null), owner_iam_id = optional(string, null), add_owner_iam_policies = optional(bool, false), enterprise_iam_managed = optional(bool, true), mfa = optional(string, "NONE") }))` | `[]` | no |
 | <a name="input_enterprise_crn"></a> [enterprise\_crn](#input\_enterprise\_crn) | The CRN of the parent Enterprise account to use. | `string` | n/a | yes |
@@ -128,7 +128,7 @@ No resources.
 ### Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_enterprise_account_groups"></a> [enterprise\_account\_groups](#output\_enterprise\_account\_groups) | List of account groups created in an Enterprise |
 | <a name="output_enterprise_accounts"></a> [enterprise\_accounts](#output\_enterprise\_accounts) | List of accounts created in an Enterprise |
 | <a name="output_enterprise_accounts_iam_response"></a> [enterprise\_accounts\_iam\_response](#output\_enterprise\_accounts\_iam\_response) | List of accounts created in an Enterprise |
